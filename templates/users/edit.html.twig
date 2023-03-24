@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if isAdd %}
+        Inscription
+    {% else %}
+        Mes informations
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    {% if error %}
+        <b>{{error}}</b>
+    {% endif %}
+    <input type="submit" value="Valider !" />
+    {{ form_end(form) }}
+
+    {# {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('user_delete') }}">Supprimer mon compte</a>
+    {% else %}
+        <a href="{{ path('security_login') }}">Connexion</a>
+    {% endif %} #}
+{% endblock %}
