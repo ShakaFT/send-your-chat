@@ -2,19 +2,19 @@
 
 namespace App\Entity;
 
+use App\DTO\AbstractDto;
+use App\DTO\UserDto;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
@@ -23,6 +23,9 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $roles = null;
 
     #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
     private Collection $chats;
@@ -33,12 +36,19 @@ class User
     public function __construct()
     {
         $this->chats = new ArrayCollection();
+        $this->roles = 'ROLES_USER';
         $this->messages = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    /**
+	 * @param UserDto $dto
+	 */
+    public function setFromDto(AbstractDto $dto): void {
+        $this->setUsername($dto->username);
+        $this->setEmail($dto->email);
+        if ($dto->password) {
+            $this->setPassword($dto->password);
+        }
     }
 
     public function getUsername(): ?string
@@ -132,5 +142,19 @@ class User
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return explode(',', $this->roles);
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail();
     }
 }
