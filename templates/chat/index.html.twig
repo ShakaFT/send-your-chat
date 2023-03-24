@@ -4,9 +4,13 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container-fluid text-bg-dark vh-100">
-		<div class="row">
-			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3">
+	<div
+		class="container-fluid text-bg-dark vh-100">
+		<!-- Start of row -->
+		<div
+			class="row">
+			<!-- Start of sidebar -->
+			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3 card text-bg-dark">
 				<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 					<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
 					<span class="fs-4">Mes chats</span>
@@ -44,6 +48,12 @@
 						</a>
 					</li>
 				</ul>
+
+				<div class="button-container">
+					<button type="button" class="btn btn-primary">Créer un chat</button>
+					<button type="button" class="btn btn-outline-primary">Rejoindre un chat</button>
+				</div>
+
 				<hr>
 				<div class="dropdown">
 					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,9 +61,6 @@
 						<strong>varlopecar</strong>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-						<li>
-							<a class="dropdown-item" href="#">New project...</a>
-						</li>
 						<li>
 							<a class="dropdown-item" href="#">Settings</a>
 						</li>
@@ -67,10 +74,13 @@
 					</ul>
 				</div>
 			</div>
+			<!-- End of sidebar -->
+
 			<!-- Start of chat -->
 			<div class="col-sm-9">
 				<div class="p-3 m-3 rounded-3">
 					<h4 class="text-center">Chat</h4>
+					<!-- Start of chat -->
 					<div class="messages-container overflow-auto mh-50" style="height: 350px;">
 						<ul class="list-unstyled ps-3 d-flex justify-content-center flex-column w-50 m-auto">
 							<li class="d-flex justify-content-between mb-4">
@@ -129,6 +139,7 @@
 						</div>
 						<button type="submit" class="btn btn-primary mt-2">Send</button>
 					</form>
+					<!-- End of chat -->
 				</div>
 			</div>
 		</div>
