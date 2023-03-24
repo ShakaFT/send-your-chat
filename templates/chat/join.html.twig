@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejoindre un chat{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    <input type="submit" value="Rejoindre"/>
+    {{ form_end(form) }}
+{% endblock %}
