@@ -17,7 +17,7 @@
             "ref": "6b43b7b6ff6bf2551f2933ebeb66721fa3db8fbc"
         },
         "files": [
-            "config/packages/doctrine.yaml",
+            "config/packages/doctrine.yaml"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -29,7 +29,7 @@
             "ref": "1d01ec03c6ecbd67c3375c5478c9a423ae5d6a33"
         },
         "files": [
-            "config/packages/doctrine_migrations.yaml",
+            "config/packages/doctrine_migrations.yaml"
         ]
     },
     "sensio/framework-extra-bundle": {
