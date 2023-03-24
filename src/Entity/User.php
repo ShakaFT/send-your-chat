@@ -36,7 +36,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function __construct()
     {
         $this->chats = new ArrayCollection();
-        $this->roles = 'ROLES_USER';
+        $this->roles = 'ROLE_USER';
         $this->messages = new ArrayCollection();
     }
 

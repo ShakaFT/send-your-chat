@@ -48,15 +48,20 @@ class UserService extends AbstractEntityService {
 	 */
 	public function update(AbstractDto $dto, AbstractEntity $entity): string {
 		$userWithNewMail = $this->repository->findByEmail($dto->email);
-		$userWithNewUsername = $this->repository->findByEmail($dto->email);
+		$userWithNewUsername = $this->repository->findByUsername($dto->username);
 
 		if ($userWithNewMail && $userWithNewMail[0]->getId() !== $entity->getId()) {
 			return 'Il y a déjà un utilisateur avec cette adresse mail';
 		}
 
-		if ($userWithNewMail && $userWithNewUsername[0]->getId() !== $entity->getId()) {
+		if ($userWithNewUsername && $userWithNewUsername[0]->getId() !== $entity->getId()) {
 			return 'Il y a déjà un utilisateur avec ce pseudo';
 		}
+
+		if ($dto->password !== $dto->passwordConfirm){
+			return 'Les deux mots de passe doivent être identiques';
+		}
+		$dto->password = $this->encodePassword($entity, $dto->password);
 
 		return parent::update($dto, $entity);
 	}
