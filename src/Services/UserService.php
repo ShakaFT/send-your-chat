@@ -7,7 +7,6 @@ use App\DTO\UserDto;
 use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 

@@ -9,16 +9,45 @@
 {% endblock %}
 
 {% block body %}
-	{{ form_start(form) }}
+	<div class="container d-flex flex-column justify-content-center text-bg-dark min-vw-100 min-vh-100 m-0">
+		<div class"row g-3" style="display: flex; justify-content: center;">
+			{{ form_start(form) }}
+			<div class="col-auto d-flex flex-column">
+				<label>Username</label>
+				{{ form_widget(form.username) }}
+			</div>
+			<div class="col-auto d-flex flex-column">
+				<label>Email</label>
+				{{ form_widget(form.email) }}
+			</div>
+			<div class="col-auto d-flex flex-column">
+				<label>Password</label>
+				{{ form_widget(form.password) }}
+			</div>
+			<div class="col-auto d-flex flex-column">
+				<label>Confirm password</label>
+				{{ form_widget(form.passwordConfirm) }}
+			</div>
 
-	{{ form_rest(form) }}
-	{% if error %}
-		<b class="text-danger">{{error}}</b>
-	{% endif %}
-	<input type="submit" value="Valider !"/>
-	{{ form_end(form) }}
+			{{ form_rest(form) }}
+			{% if error %}
+				<b class="text-danger">{{error}}</b>
+			{% endif %}
 
-	{% if not is_granted('ROLE_USER') %}
-		<a href="{{ path('security_login') }}">Connexion</a>
-	{% endif %}
-{% endblock %}
+
+			{% if not is_granted('ROLE_USER') %}
+				<div class="col-auto m-3 text-center">
+					<button type="submit" class="btn btn-primary">S'inscrire</button>
+				</div>
+				<div class="col-auto m-3 text-center">
+					<a href="{{ path('security_login') }}">Est-ce que vous avez déjà un compte ?</a>
+				</div>
+			{% else %}
+				<div class="col-auto m-3 text-center">
+					<button type="submit" class="btn btn-primary">Modifier</button>
+				</div>
+
+			{% endif %}
+			{{ form_end(form) }}
+		</div>
+	{% endblock %}

@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion
+{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+	<div class="container text-bg-dark d-flex flex-column justify-content-center min-vw-100 min-vh-100 m-0">
+		<div class="d-flex justify-content-center">
+			<form method="post">
+				{% if error %}
+					<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+				{% endif %}
 
-        <label for="inputUsername">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="inputUsername" required autofocus>
-        <label for="inputPassword">Mot de passe</label>
-        <input type="password" name="_password" id="inputPassword" required>
 
-        <button type="submit">Connexion</button>
-    </form>
-
-    <a href="{{ path('add_user') }}">Inscription</a>
+				<div class="d-flex flex-column">
+					<label for="inputUsername">Email</label>
+					<input type="email" value="{{ last_username }}" name="_username" id="inputUsername" required autofocus>
+				</div>
+				<div class="d-flex flex-column mt-2">
+					<label for="inputPassword">Mot de passe</label>
+					<input type="password" name="_password" id="inputPassword" required>
+				</div>
+				<div class="text-center">
+					<button class="btn btn-primary mt-4" type="submit">Connexion</button>
+				</div>
+                <div class="mt-2">
+                <a href="{{ path('add_user') }}">Vous n'avez pas de compte ?</a>
+                </div>
+            </form>
+		</div>
+	</div>
 {% endblock %}

@@ -5,10 +5,10 @@
 
 {% block body %}
 	<div
-		class="container-fluid text-bg-dark vh-100">
+		class="container-fluid text-bg-dark min-vh-100">
 		<!-- Start of row -->
 		<div
-			class="row">
+			class="row min-vh-100">
 			<!-- Start of sidebar -->
 			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3 card text-bg-dark">
 				<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -65,11 +65,11 @@
 							<a class="dropdown-item" href="">Settings</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="">Profile</a>
+							<a class="dropdown-item" href="{{path('edit_user')}}">Profile</a>
 						</li>
 						<li><hr class="dropdown-divider"></li>
 						<li>
-							<a class="dropdown-item" href="#">Sign out</a>
+							<a class="dropdown-item" href="{{path('security_logout')}}">Sign out</a>
 						</li>
 					</ul>
 				</div>
@@ -81,7 +81,7 @@
 				<div class="p-3 m-3 rounded-3">
 					<h4 class="text-center">Chat</h4>
 					<!-- Start of chat -->
-					<div class="messages-container overflow-auto mh-50" style="height: 350px;">
+					<div class="messages-container overflow-auto mh-50" style="height: 400px;">
 						<ul class="list-unstyled ps-3 d-flex justify-content-center flex-column w-50 m-auto">
 							<li class="d-flex justify-content-between mb-4">
 								<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
