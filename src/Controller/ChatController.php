@@ -28,8 +28,10 @@ class ChatController extends AbstractController
     #[Route('/', name: 'get_chats', methods: ["GET"])]
     public function get_chats(): Response
     {
-        $messages = $this->messageRepository->findAll();
-        return $this->render('chat/chats.html.twig');
+        // $messages = $this->messageRepository->findAll();
+        return $this->render('chat/chats.html.twig', [
+            // 'messages' => $messages
+        ]);
     }
 
     #[Route('/join', name: 'join_chats', methods: ["GET", "POST"])]

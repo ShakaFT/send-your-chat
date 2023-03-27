@@ -4,13 +4,24 @@
 {% endblock %}
 
 {% block body %}
+	<style>
+		body::-webkit-scrollbar {
+			display: none; /* for Chrome, Safari, and Opera */
+		}
+		.messages-container {
+			overflow-y: auto;
+			-ms-overflow-style: none; /* for Internet Explorer, Edge */
+			scrollbar-width: none; /* for Firefox */
+			overflow-y: scroll;
+		}
+	</style>
 	<div
-		class="container-fluid text-bg-dark min-vh-100">
+		class="container-fluid text-bg-dark">
 		<!-- Start of row -->
 		<div
-			class="row min-vh-100">
+			class="row">
 			<!-- Start of sidebar -->
-			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3 card text-bg-dark">
+			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3 card text-bg-dark vh-100">
 				<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 					<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
 					<span class="fs-4">Mes chats</span>
@@ -77,25 +88,71 @@
 			</div>
 			<!-- End of sidebar -->
 
-			<!-- Start of chat -->
-			<div class="col-sm-9 h-100 container">
-				<div class="d-flex flex-column h-100 position-relative">
-					<div class="p-3 m-3 rounded-3 overflow-hidden">
+			<div class="col-sm-9 d-flex vh-100">
+				<div class="d-flex flex-column justify-content-between">
+					<div class="p-3 m-3 rounded-3">
 						<h4 class="text-center">Chat</h4>
 						<!-- Start of chat -->
-						<div class="messages-container hide-scrollbar flex-1 h-100">
-							{% for messages in messages %}
-								{% include 'messages-l.html.twig' %}
-							{% endfor %}
+						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
+							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
+								<li class="d-flex justify-content-between mb-4">
+									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+									<div class="card text-bg-light">
+										<div class="card-header d-flex justify-content-between p-3">
+											<p class="fw-bold mb-0">Brad Pitt</p>
+											<p class="text-muted small mb-0">
+												<i class="far fa-clock"></i>
+												10 mins ago</p>
+										</div>
+										<div class="card-body">
+											<p class="mb-0">
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+											</p>
+										</div>
+									</div>
+								</li>
+								<li class="d-flex justify-content-between mb-4">
+									<div class="card w-100 text-bg-light">
+										<div class="card-header d-flex justify-content-between p-3">
+											<p class="fw-bold mb-0">Lara Croft</p>
+											<p class="text-muted small mb-0">
+												<i class="far fa-clock"></i>
+												13 mins ago</p>
+										</div>
+										<div class="card-body">
+											<p class="mb-0">
+												Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+											</p>
+										</div>
+									</div>
+									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+								</li>
+								<li class="d-flex justify-content-between mb-4">
+									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+									<div class="card text-bg-light">
+										<div class="card-header d-flex justify-content-between p-3">
+											<p class="fw-bold mb-0">Brad Pitt</p>
+											<p class="text-muted small mb-0">
+												<i class="far fa-clock"></i>
+												10 mins ago</p>
+										</div>
+										<div class="card-body">
+											<p class="mb-0">
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+											</p>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
 						<!-- End of chat -->
+						<form class="flex-shrink-0 mb-2 position-sticky bottom-0">
+							<div class="form-group">
+								<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+						</form>
 					</div>
-					<form class="flex-shrink-0 mb-2">
-						<div class="form-group">
-							<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
-						</div>
-						<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
-					</form>
 				</div>
 			</div>
 		</div>
