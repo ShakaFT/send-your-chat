@@ -25,22 +25,20 @@ class ChatController extends AbstractController
     }
 
     #[Route('/', name: 'get_chats', methods: ["GET"])]
-    public function get_chats(): Response
+    public function get_chats(Request $request): Response
     {
-        /** @var User $currentUser */
-        $currentUser = $this->getUser();
-
-        $chats = $currentUser->getChats();
-
         return $this->render('chat/chats.html.twig', [
-            'chats' => $chats,
-            'currentChat' => $chats[0]
+            ...chats_render($request, $this->getUser()),
         ]);
     }
 
     #[Route('/join', name: 'join_chats', methods: ["GET", "POST"])]
     public function join_chats(Request $request): Response
     {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $chats = $currentUser->getChats();
+
         $chatDto = new JoinChatDto();
         $error = "";
 
@@ -53,7 +51,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('shared/modal.html.twig', [
-            'background' => 'chats',
+            ...chats_render($request, $this->getUser()),
             'confirmationTitle' => 'Rejoindre',
             'error' => $error,
             'form' => $form,
@@ -64,19 +62,27 @@ class ChatController extends AbstractController
     #[Route('/create', name: 'create_chats', methods: ["GET", "POST"])]
     public function create_chats(Request $request): Response
     {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $chats = $currentUser->getChats();
+
         $chatDto = new CreateChatDto();
 
         $form = $this->createForm(CreateChatType::class, $chatDto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $error = $this->chatService->add($chatDto, new Chat());
+            $chat = new Chat();
+            $chat->addUser($this->getUser());
+            $error = $this->chatService->add($chatDto, $chat);
 
             if (!$error) return $this->redirectToRoute('get_chats');
         }
 
+        $test = [];
+
         return $this->render('shared/modal.html.twig', [
-            'background' => 'chats',
+            ...chats_render($request, $this->getUser()),
             'confirmationTitle' => 'Créer',
             'error' => '',
             'form' => $form,
@@ -107,4 +113,14 @@ class ChatController extends AbstractController
             'controller_name' => 'SettingsChats',
         ]);
     }
+}
+
+function chats_render(Request $request, User $currentUser): array {
+    $chats = $currentUser->getChats();
+    return [
+        'background' => 'chats',
+        'chats' => $chats,
+        'currentChat' => $request->query->get('currentChat') ?? strval($chats->getValues() ? $chats[0]->getId() : 0),
+        'username' => $currentUser->getUsername(),
+    ];
 }
