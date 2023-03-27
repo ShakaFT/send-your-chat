@@ -44,7 +44,7 @@ class UserController extends AbstractController
 			if (!$error) return $this->redirectToRoute('add_user');
 		}
 
-		return $this->render('users/edit.html.twig', [
+		return $this->render('users/add.html.twig', [
 			'form' => $form->createView(),
 			'isAdd' => true,
 			'error' => $error
@@ -65,13 +65,15 @@ class UserController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			$error = $this->userService->update($userDto, $user);
-			if (!$error) return $this->redirectToRoute('edit_user');
+			if (!$error) return $this->redirectToRoute('get_chats');
 		}
 
-		return $this->render('users/edit.html.twig', [
-			'form' => $form->createView(),
-			'isAdd' => false,
-			'error' => $error
-		]);
+		return $this->render('shared/modal.html.twig', [
+            'confirmationTitle' => 'Modifier',
+            'error' => $error,
+			'background' => 'chats',
+            'modalTitle' => 'Modifier le profil',
+            'form' => $form,
+        ]);
 	}
 }

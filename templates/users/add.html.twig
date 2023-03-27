@@ -11,7 +11,7 @@
 
 			{% for child in form %}
 				{% if 'Token' not in form_label(child) %}
-					<div class="col-auto d-flex flex-column">
+					<div class="col-auto d-flex flex-column mt-2">
 						{{ form_label(child) }}
 						{{ form_widget(child) }}
 					</div>
@@ -21,12 +21,15 @@
 				<button type="submit" class="btn btn-primary">S'inscrire</button>
 			</div>
 			{{ form_end(form) }}
-			<div class="col-auto m-3 text-center">
-				<a href="{{ path('security_login') }}">Est-ce que vous avez déjà un compte ?</a>
-			</div>
+		</div>
+		<div class"row g-3" style="display: flex; justify-content: center;">
+			<a href="{{ path('security_login') }}">Est-ce que vous avez déjà un compte ?</a>
 		</div>
 		{% if error %}
-			<b class="text-danger" style="display: flex; justify-content: center;">{{error}}</b>
+			<div class"row g-3" style="display: flex; justify-content: center;">
+				<b class="text-danger" style="display: flex; justify-content: center;">{{error}}</b>
+			</div>
 		{% endif %}
+
 	</div>
 {% endblock %}
