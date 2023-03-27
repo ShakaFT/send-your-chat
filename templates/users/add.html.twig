@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Inscription
+{% endblock %}
+
+{% block body %}
+	<div class="container d-flex flex-column justify-content-center text-bg-dark min-vw-100 min-vh-100 m-0">
+		<div class"row g-3" style="display: flex; justify-content: center;">
+			{{ form_start(form) }}
+
+			{% for child in form %}
+				{% if 'Token' not in form_label(child) %}
+					<div class="col-auto d-flex flex-column mt-2">
+						{{ form_label(child) }}
+						{{ form_widget(child) }}
+					</div>
+				{% endif %}
+			{% endfor %}
+			<div class="col-auto m-3 text-center">
+				<button type="submit" class="btn btn-primary">S'inscrire</button>
+			</div>
+			{{ form_end(form) }}
+		</div>
+		<div class"row g-3" style="display: flex; justify-content: center;">
+			<a href="{{ path('security_login') }}">Est-ce que vous avez déjà un compte ?</a>
+		</div>
+		{% if error %}
+			<div class"row g-3" style="display: flex; justify-content: center;">
+				<b class="text-danger" style="display: flex; justify-content: center;">{{error}}</b>
+			</div>
+		{% endif %}
+
+	</div>
+{% endblock %}

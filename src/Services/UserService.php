@@ -57,10 +57,10 @@ class UserService extends AbstractEntityService {
 			return 'Il y a déjà un utilisateur avec ce pseudo';
 		}
 
-		if ($dto->password !== $dto->passwordConfirm){
-			return 'Les deux mots de passe doivent être identiques';
-		}
-		$dto->password = $this->encodePassword($entity, $dto->password);
+		// if ($dto->password !== $dto->passwordConfirm){
+		// 	return 'Les deux mots de passe doivent être identiques';
+		// }
+		// $dto->password = $this->encodePassword($entity, $dto->password);
 
 		return parent::update($dto, $entity);
 	}
