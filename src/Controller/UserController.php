@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\DTO\ResetPasswordDto;
 use App\DTO\UserDto;
 use App\Entity\User;
+use App\Form\ResetPasswordType;
 use App\Form\UserType;
 use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -73,6 +75,31 @@ class UserController extends AbstractController
             'error' => $error,
 			'background' => 'chats',
             'modalTitle' => 'Modifier le profil',
+            'form' => $form,
+        ]);
+	}
+	#[Route('/reset_password', name: 'reset_password', methods: ['GET', 'POST'])]
+	public function resetPassword(Request $request): Response
+	{
+		/** @var User $user */
+		$user = $this->getUser();
+		$resetPasswordDto = new ResetPasswordDto();
+
+		$form = $this->createForm(ResetPasswordType::class, $resetPasswordDto);
+		$form->handleRequest($request);
+
+		$error = "";
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$error = $this->userService->updatePassword($resetPasswordDto, $user);
+			if (!$error) return $this->redirectToRoute('get_chats');
+		}
+
+		return $this->render('shared/modal.html.twig', [
+            'confirmationTitle' => 'Réinitialiser',
+            'error' => $error,
+			'background' => 'chats',
+            'modalTitle' => 'Réinitialiser le mot de passe',
             'form' => $form,
         ]);
 	}

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\AbstractDto;
 use App\DTO\UserDto;
+use App\DTO\ResetPasswordDto;
 use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -57,13 +58,24 @@ class UserService extends AbstractEntityService {
 			return 'Il y a déjà un utilisateur avec ce pseudo';
 		}
 
-		// if ($dto->password !== $dto->passwordConfirm){
-		// 	return 'Les deux mots de passe doivent être identiques';
-		// }
-		// $dto->password = $this->encodePassword($entity, $dto->password);
+	
 
 		return parent::update($dto, $entity);
 	}
+
+	/**
+	 * @param ResetPasswordDto $dto
+	 * @param User $entity
+	 */
+	public function updatePassword(AbstractDto $dto, AbstractEntity $entity): string {
+		if($dto->newPassword !== $dto->confirmPassword) {
+			return 'Les deux mots de passe doivent être identiques';
+		}
+		
+		$entity->setPassword($this->encodePassword($entity, $dto->newPassword));
+		$this->repository->save($entity, true);
+		return '';
+		}
 
 	public function encodePassword(PasswordAuthenticatedUserInterface $user, string $value): string {
 		return $this->passwordHasher->hashPassword($user, $value);
