@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\DTO\Chat\CreateChatDto;
+use App\DTO\Chat\JoinChatDto;
 use App\Repository\ChatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ChatRepository::class)]
 class Chat extends AbstractEntity
@@ -28,6 +31,15 @@ class Chat extends AbstractEntity
         $this->users = new ArrayCollection();
         $this->messages = new ArrayCollection();
     }
+
+    public function setFromCreateDto(CreateChatDto $dto): void {
+        $this->setName($dto->name);
+        $this->setToken(Uuid::v4());
+	}
+
+    public function setFromJoinDto(JoinChatDto $dto): void {
+        $this->setToken($dto->token);
+	}
 
     public function getToken(): ?string
     {

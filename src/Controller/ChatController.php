@@ -7,7 +7,7 @@ use App\DTO\Chat\JoinChatDto;
 use App\Entity\Chat;
 use App\Form\Chat\CreateChatType;
 use App\Form\Chat\JoinChatType;
-use App\Repository\ChatRepository;
+use App\Services\ChatService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/chats")]
 class ChatController extends AbstractController
 {
-    private ChatRepository $chatRepository;
+    private ChatService $chatService;
 
-    public function __construct(ChatRepository $chatRepository)
+    public function __construct(ChatService $chatService)
     {
-        $this->chatRepository = $chatRepository;
+        $this->chatService = $chatService;
     }
 
     #[Route('/', name: 'get_chats', methods: ["GET"])]
@@ -33,14 +33,21 @@ class ChatController extends AbstractController
     public function join_chats(Request $request): Response
     {
         $chatDto = new JoinChatDto();
+        $error = "";
 
         $form = $this->createForm(JoinChatType::class, $chatDto);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $error = $this->chatService->join($chatDto, $this->getUser());
+            if (!$error) return $this->redirectToRoute('get_chats');
+        }
+
         return $this->render('chat/modal.html.twig', [
-            'modalTitle' => 'Créer un chat',
-            'confirmationTitle' => 'Créer',
-            'form' => $form
+            'modalTitle' => 'Rejoindre un chat',
+            'confirmationTitle' => 'Rejoindre',
+            'form' => $form,
+            'error' => $error
         ]);
     }
 
@@ -52,10 +59,17 @@ class ChatController extends AbstractController
         $form = $this->createForm(CreateChatType::class, $chatDto);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $error = $this->chatService->add($chatDto, new Chat());
+
+            if (!$error) return $this->redirectToRoute('get_chats');
+        }
+
         return $this->render('chat/modal.html.twig', [
-            'modalTitle' => 'Rejoindre un chat',
-            'confirmationTitle' => 'Rejoindre',
-            'form' => $form
+            'modalTitle' => 'Créer un chat',
+            'confirmationTitle' => 'Créer',
+            'form' => $form,
+            'error' => ''
         ]);
     }
 
