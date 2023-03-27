@@ -26,39 +26,18 @@
 					<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
 					<span class="fs-4">Mes chats</span>
 				</a>
-				<hr>
+
 				<ul class="nav nav-pills flex-column mb-auto">
-					<li class="nav-item">
-						<a href="#" class="nav-link active" aria-current="page">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-							Chat 1
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-							Chat 2
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-							Chat 3
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-							Chat 4
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-							Chat 5
-						</a>
-					</li>
+					{% for chat in chats %}
+						<li class="nav-item">
+							<a href="#" class="nav-link {{currentChat.getId() is same as chat.getId() ? 'active' : 'text-white'}}" aria-current="page">
+								<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+								{{ chat.name }}
+							</a>
+						</li>
+					{% endfor %}
 				</ul>
+
 				<div class="position-sticky bottom-0">
 					<div class="button-container">
 						<a href="{{ path('create_chats') }}" class="btn btn-primary">Créer un chat</a>

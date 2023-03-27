@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\DTO\Chat\CreateChatDto;
 use App\DTO\Chat\JoinChatDto;
 use App\Entity\Chat;
+use App\Entity\User;
 use App\Form\Chat\CreateChatType;
 use App\Form\Chat\JoinChatType;
 use App\Services\ChatService;
-use App\Repository\MessageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChatController extends AbstractController
 {
     private ChatService $chatService;
-    private MessageRepository $messageRepository;
 
     public function __construct(ChatService $chatService)
     {
@@ -28,9 +27,14 @@ class ChatController extends AbstractController
     #[Route('/', name: 'get_chats', methods: ["GET"])]
     public function get_chats(): Response
     {
-        // $messages = $this->messageRepository->findAll();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+
+        $chats = $currentUser->getChats();
+
         return $this->render('chat/chats.html.twig', [
-            // 'messages' => $messages
+            'chats' => $chats,
+            'currentChat' => $chats[0]
         ]);
     }
 
