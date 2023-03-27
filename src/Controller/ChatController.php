@@ -25,7 +25,7 @@ class ChatController extends AbstractController
     #[Route('/', name: 'get_chats', methods: ["GET"])]
     public function get_chats(): Response
     {
-        return $this->render('chat/index.html.twig');
+        return $this->render('chat/chats.html.twig');
     }
 
     #[Route('/join', name: 'join_chats', methods: ["GET", "POST"])]
@@ -36,7 +36,9 @@ class ChatController extends AbstractController
 		$form = $this->createForm(JoinChatType::class, $chatDto);
 		$form->handleRequest($request);
 
-        return $this->render('chat/join.html.twig', [
+        return $this->render('chat/modal.html.twig', [
+            'modalTitle' => 'Créer un chat',
+            'confirmationTitle' => 'Créer',
             'form' => $form
         ]);
     }
@@ -49,7 +51,9 @@ class ChatController extends AbstractController
 		$form = $this->createForm(CreateChatType::class, $chatDto);
 		$form->handleRequest($request);
 
-        return $this->render('chat/create.html.twig', [
+        return $this->render('chat/modal.html.twig', [
+            'modalTitle' => 'Rejoindre un chat',
+            'confirmationTitle' => 'Rejoindre',
             'form' => $form
         ]);
     }
@@ -57,7 +61,7 @@ class ChatController extends AbstractController
     #[Route('/update', name: 'update_chats', methods: ["GET", "POST"])]
     public function update_chats(): Response
     {
-        return $this->render('chat/index.html.twig', [
+        return $this->render('chat/chats.html.twig', [
             'controller_name' => 'UpdateChats',
         ]);
     }
@@ -65,7 +69,7 @@ class ChatController extends AbstractController
     #[Route('/delete', name: 'delete_chats', methods: ["GET", "POST"])]
     public function delete_chats(): Response
     {
-        return $this->render('chat/index.html.twig', [
+        return $this->render('chat/chats.html.twig', [
             'controller_name' => 'DeleteChats',
         ]);
     }

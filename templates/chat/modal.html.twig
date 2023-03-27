@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	{% include 'chat/chats.html.twig' %}
+	<script type="text/javascript">
+		$(window).on('load', function () {
+$('#chatModal').modal({backdrop: 'static', keyboard: false}).modal('show');
+});
+	</script>
+
+	<div class="modal" id="chatModal">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{{ modalTitle }}</h5>
+					<a href="{{ path('get_chats') }}" class="btn-close"></a>
+				</div>
+				<div class="modal-body">
+					{{ form_start(form) }}
+					{{ form_rest(form) }}
+					<input type="submit" value="Envoyer"/>
+					{{ form_end(form) }}
+				</div>
+				<div class="modal-footer">
+					<a href="{{ path('get_chats') }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path('get_chats') }}" type="button" class="btn btn-primary"> {{ confirmationTitle }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
