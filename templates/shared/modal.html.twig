@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+	{% if background is same as 'chats' %}
+		{% include 'chat/chats.html.twig' %}
+	{% endif %}
+
 	<script type="text/javascript">
 		$(window).on('load', function () {
 $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
