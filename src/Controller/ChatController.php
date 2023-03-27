@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\Chat\CreateChatDto;
 use App\DTO\Chat\JoinChatDto;
+use App\Entity\Chat;
 use App\Form\Chat\CreateChatType;
 use App\Form\Chat\JoinChatType;
 use App\Repository\ChatRepository;
@@ -15,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/chats")]
 class ChatController extends AbstractController
 {
-	private ChatRepository $chatRepository;
+    private ChatRepository $chatRepository;
 
-	public function __construct(ChatRepository $chatRepository)
-	{
-		$this->chatRepository = $chatRepository;
-	}
+    public function __construct(ChatRepository $chatRepository)
+    {
+        $this->chatRepository = $chatRepository;
+    }
 
     #[Route('/', name: 'get_chats', methods: ["GET"])]
     public function get_chats(): Response
@@ -33,8 +34,8 @@ class ChatController extends AbstractController
     {
         $chatDto = new JoinChatDto();
 
-		$form = $this->createForm(JoinChatType::class, $chatDto);
-		$form->handleRequest($request);
+        $form = $this->createForm(JoinChatType::class, $chatDto);
+        $form->handleRequest($request);
 
         return $this->render('chat/modal.html.twig', [
             'modalTitle' => 'Créer un chat',
@@ -48,8 +49,8 @@ class ChatController extends AbstractController
     {
         $chatDto = new CreateChatDto();
 
-		$form = $this->createForm(CreateChatType::class, $chatDto);
-		$form->handleRequest($request);
+        $form = $this->createForm(CreateChatType::class, $chatDto);
+        $form->handleRequest($request);
 
         return $this->render('chat/modal.html.twig', [
             'modalTitle' => 'Rejoindre un chat',

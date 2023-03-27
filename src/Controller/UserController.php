@@ -16,63 +16,62 @@ class UserController extends AbstractController
 {
 	private UserService $userService;
 
-    public function __construct(UserService $userService) {
+	public function __construct(UserService $userService)
+	{
 		$this->userService = $userService;
 	}
 
-    #[Route('/add', name: 'add_user', methods: ['GET','POST'])]
-    public function add(Request $request): Response
-    {
-        /** @var User $user */
-	    $user = $this->getUser();
-	    if ($user) {
-		    return $this->redirectToRoute('index');
-	    }
+	#[Route('/add', name: 'add_user', methods: ['GET', 'POST'])]
+	public function add(Request $request): Response
+	{
+		/** @var User $user */
+		$user = $this->getUser();
+		if ($user) {
+			return $this->redirectToRoute('index');
+		}
 
-	    $userDto = new UserDto();
+		$userDto = new UserDto();
 
-	    $form = $this->createForm(UserType::class, $userDto, ['validation_groups' => ['Default', 'add']]);
-	    $form->handleRequest($request);
-
-		$error = "";
-
-	    if ($form->isSubmitted() && $form->isValid()) {
-		    $user = new User();
-		    $error = $this->userService->add($userDto, $user);	
-
-            if(!$error) return $this->redirectToRoute('add_user');
-        }
-
-        return $this->render('users/edit.html.twig', [
-            'form' => $form->createView(),
-	        'isAdd' => true,
-			'error' => $error
-        ]);
-    }
-
-	#[Route('/', name: 'edit_user', methods: ['GET','POST'])]
-    public function edit(Request $request): Response
-    {
-        /** @var User $user */
-	    $user = $this->getUser();
-	    $userDto = new UserDto();
-
-	    $form = $this->createForm(UserType::class, $userDto);
-	    $form->handleRequest($request);
+		$form = $this->createForm(UserType::class, $userDto, ['validation_groups' => ['Default', 'add']]);
+		$form->handleRequest($request);
 
 		$error = "";
 
-	    if ($form->isSubmitted() && $form->isValid()) {
-		    $error = $this->userService->update($userDto, $user);	
-            if(!$error) return $this->redirectToRoute('edit_user');
-        }
+		if ($form->isSubmitted() && $form->isValid()) {
+			$user = new User();
+			$error = $this->userService->add($userDto, $user);
 
-        return $this->render('users/edit.html.twig', [
-            'form' => $form->createView(),
-	        'isAdd' => false,
+			if (!$error) return $this->redirectToRoute('add_user');
+		}
+
+		return $this->render('users/edit.html.twig', [
+			'form' => $form->createView(),
+			'isAdd' => true,
 			'error' => $error
-        ]);
-    }
+		]);
+	}
 
+	#[Route('/', name: 'edit_user', methods: ['GET', 'POST'])]
+	public function edit(Request $request): Response
+	{
+		/** @var User $user */
+		$user = $this->getUser();
+		$userDto = new UserDto();
 
+		$form = $this->createForm(UserType::class, $userDto);
+		$form->handleRequest($request);
+
+		$error = "";
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$error = $this->userService->update($userDto, $user);
+			if (!$error) return $this->redirectToRoute('edit_user');
+		}
+
+		return $this->render('users/edit.html.twig', [
+			'form' => $form->createView(),
+			'isAdd' => false,
+			'error' => $error
+		]);
+	}
 }

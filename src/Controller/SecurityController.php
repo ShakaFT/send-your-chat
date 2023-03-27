@@ -13,7 +13,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
 	#[Route("/login", name: "security_login")]
-	public function login(AuthenticationUtils $authenticationUtils): Response {
+	public function login(AuthenticationUtils $authenticationUtils): Response
+	{
 		/** @var User $user */
 		$user = $this->getUser();
 		if ($user) {
@@ -32,5 +33,7 @@ class SecurityController extends AbstractController
 	 * @throws Exception
 	 */
 	#[Route("/logout", name: "security_logout")]
-	public function logout(): void {}
+	public function logout(): void
+	{
+	}
 }
