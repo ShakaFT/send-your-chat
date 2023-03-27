@@ -10,10 +10,10 @@
 
 {% block body %}
 	<div class="container d-flex flex-column justify-content-center text-bg-dark min-vw-100 min-vh-100 m-0">
-		<div class"row g-3" style="display: flex; justify-content: center;">
+		<div class"row g-3" style=" display: flex; justify-content: center; ">
 			{{ form_start(form) }}
 			<div class="col-auto d-flex flex-column">
-				<label>Username</label>
+				<label>Nom</label>
 				{{ form_widget(form.username) }}
 			</div>
 			<div class="col-auto d-flex flex-column">
@@ -21,11 +21,11 @@
 				{{ form_widget(form.email) }}
 			</div>
 			<div class="col-auto d-flex flex-column">
-				<label>Password</label>
+				<label>Mot de passe</label>
 				{{ form_widget(form.password) }}
 			</div>
 			<div class="col-auto d-flex flex-column">
-				<label>Confirm password</label>
+				<label>Confirmer mot de passe</label>
 				{{ form_widget(form.passwordConfirm) }}
 			</div>
 
