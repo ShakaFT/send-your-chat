@@ -43,11 +43,12 @@ class ChatController extends AbstractController
             if (!$error) return $this->redirectToRoute('get_chats');
         }
 
-        return $this->render('chat/modal.html.twig', [
-            'modalTitle' => 'Rejoindre un chat',
+        return $this->render('shared/modal.html.twig', [
+            'background' => 'chats',
             'confirmationTitle' => 'Rejoindre',
+            'error' => $error,
             'form' => $form,
-            'error' => $error
+            'modalTitle' => 'Rejoindre un chat',
         ]);
     }
 
@@ -65,11 +66,12 @@ class ChatController extends AbstractController
             if (!$error) return $this->redirectToRoute('get_chats');
         }
 
-        return $this->render('chat/modal.html.twig', [
-            'modalTitle' => 'Créer un chat',
+        return $this->render('shared/modal.html.twig', [
+            'background' => 'chats',
             'confirmationTitle' => 'Créer',
+            'error' => '',
             'form' => $form,
-            'error' => ''
+            'modalTitle' => 'Créer un chat',
         ]);
     }
 
