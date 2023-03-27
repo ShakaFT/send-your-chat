@@ -1,42 +1,4 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{% endblock %}
-
 {% block body %}
 	{% include 'chat/chats.html.twig' %}
-	<script type="text/javascript">
-		$(window).on('load', function () {
-$('#chatModal').modal({backdrop: 'static', keyboard: false}).modal('show');
-});
-	</script>
-
-	<div class="modal" id="chatModal">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				{{ form_start(form) }}
-				<div class="modal-header">
-					<h5 class="modal-title">{{ modalTitle }}</h5>
-					<a href="{{ path('get_chats') }}" class="btn-close"></a>
-				</div>
-				<div class="modal-body d-flex flex-column">
-
-					{% if form.name is defined %}
-						{{ form_label(form.name) }}
-						{{ form_widget(form.name) }}
-					{% else %}
-						{{ form_label(form.token) }}
-						{{ form_widget(form.token) }}
-					{% endif %}
-					<b class="text-danger">{{error}}</b>
-
-				</div>
-				<div class="modal-footer">
-					<a href="{{ path('get_chats') }}" type="button" class="btn btn-secondary">Annuler</a>
-					<button type="submit" class="btn btn-primary">
-						{{ confirmationTitle }}</button>
-				</div>
-				{{ form_end(form) }}
-			</div>
-		</div>
-	</div>
+	{% include 'shared/modal.html.twig' %}
 {% endblock %}

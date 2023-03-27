@@ -11,6 +11,9 @@
 {% block body %}
 	<div class="container d-flex flex-column justify-content-center text-bg-dark min-vw-100 min-vh-100 m-0">
 		<div class"row g-3" style="display: flex; justify-content: center;">
+			{% for test in form %}
+				{{ form_label(test) }}
+			{% endfor %}
 			{{ form_start(form) }}
 			<div class="col-auto d-flex flex-column">
 				<label>Username</label>
