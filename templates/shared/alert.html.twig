@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{% if background is same as 'chats' %}
+		{% include 'chat/chats.html.twig' %}
+	{% endif %}
+
+	<script type="text/javascript">
+		$(window).on('load', function () {
+$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+});
+	</script>
+
+	<div class="modal" id="modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{{ alertTitle }}</h5>
+					<a href="{{ path('get_chats') }}" class="btn-close"></a>
+				</div>
+				<div class="modal-body d-flex flex-column">
+					<b class="text-danger">{{alertContent}}</b>
+				</div>
+				<div class="modal-footer">
+					<a href="{{ path('get_chats') }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path(submitRoute) }}" type="button" class="btn btn-danger">{{ confirmationTitle }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

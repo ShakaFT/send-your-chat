@@ -103,4 +103,26 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
 	}
+
+	#[Route('/delete', name: 'delete_user', methods: ['GET', 'POST'])]
+	public function deleteAccount(Request $request): Response
+	{
+		return $this->render('shared/alert.html.twig', [
+            'alertTitle' => 'Supprimer le compte',
+			'background' => 'chats',
+            'confirmationTitle' => 'Supprimer',
+			'alertContent' => 'Voulez vous vraiment supprimer le compte ?',
+			'submitRoute' => 'confirm_delete_user'
+        ]);
+	}
+
+	#[Route('/confirm_delete', name: 'confirm_delete_user', methods: ['GET', 'POST'])]
+	public function confirmDeleteAccount(Request $request): Response
+	{
+		/** @var User $user */
+		$user = $this->getUser();
+		$this->userService->delete($user);
+
+		return $this->render('chats/get_chats.html.twig');
+	}
 }
