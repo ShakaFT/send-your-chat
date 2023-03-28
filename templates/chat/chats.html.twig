@@ -29,27 +29,29 @@
 
 				<hr>
 
-				<button class="btn btn-primary w-100" type="button">
+				<button class="btn btn-outline-primary w-100 mb-2" type="button">
 					Nouvelle discusion
 					<i class="fas fa-plus mx-2"></i>
 				</button>
 
-				<ul class="nav nav-pills flex-column mb-auto">
-					{% for chat in chats %}
-						<li class="nav-item">
-							<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
-								<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-								{{ chat.name }}
-							</a>
-						</li>
-					{% endfor %}
-				</ul>
+				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
+					<ul class="nav nav-pills flex-column">
+						{% for chat in chats %}
+							<li class="nav-item">
+								<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
+									<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+									{{ chat.name }}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
 
-				<div class="position-sticky bottom-0">
-					<div class="button-container">
-						<a href="{{ path('create_server', {'currentChat': currentChat}) }}" class="btn btn-primary">Créer un serveur</a>
-						<a href="{{ path('join_server', {'currentChat': currentChat}) }}" class="btn btn-outline-primary">Rejoindre un serveur</a>
-					</div>
+				</div>
+				<div class="row w-100 m-auto gy-2">
+					<a href="{{ path('create_server', {'currentChat': currentChat}) }}" class="btn btn-primary">Créer un serveur</a>
+					<a href="{{ path('join_server', {'currentChat': currentChat}) }}" class="btn btn-outline-primary">Rejoindre un serveur</a>
+				</div>
+				<div>
 					<hr>
 					<div class="dropdown mb-2">
 						<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,7 +79,7 @@
 			<!-- End of sidebar -->
 
 			<div class="col-sm-9 d-flex vh-100">
-				<div class="d-flex flex-column justify-content-between">
+				<div class="d-flex flex-column justify-content-between w-100">
 					<div class="p-3 m-3 rounded-3">
 						<div class="row align-items-center mb-2">
 							<div class="col-6">
@@ -103,7 +105,7 @@
 										</div>
 										<div class="card-body">
 											<p class="mb-0">
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+												Lorem ipsum dolor sit amet.
 											</p>
 										</div>
 									</div>
@@ -118,7 +120,7 @@
 										</div>
 										<div class="card-body">
 											<p class="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+												Sed ut perspiciatis unde.
 											</p>
 										</div>
 									</div>
@@ -135,7 +137,7 @@
 										</div>
 										<div class="card-body">
 											<p class="mb-0">
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+												Lorem ipsum dolor sit amet.
 											</p>
 										</div>
 									</div>
