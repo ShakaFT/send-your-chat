@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\Friends;
+namespace App\DTO\Friend;
 
 use App\DTO\AbstractDto;
 use App\Entity\AbstractEntity;
@@ -19,7 +19,7 @@ class AddFriendDto extends AbstractDto
      */
     public function setFromEntity(AbstractEntity $friend): void
     {
-        $this->username = $friend->getFriend()->getUsername();
+        $this->username = $friend->getUser2()->getUsername();
     }
 
     /**

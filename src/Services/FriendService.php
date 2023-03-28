@@ -3,19 +3,18 @@
 namespace App\Services;
 
 use App\DTO\AbstractDto;
-use App\DTO\Friends\AddFriendDto;
+use App\DTO\Friend\AddFriendDto;
 use App\Entity\AbstractEntity;
 use App\Entity\Friend;
 use App\Entity\User;
-use App\Repository\FriendsRepository;
-use App\Repository\UserRepository;
+use App\Repository\FriendRepository;
 
-class FriendsService extends AbstractEntityService
+class FriendService extends AbstractEntityService
 {
 
-    public function __construct(FriendsRepository $friendsRepository)
+    public function __construct(FriendRepository $friendRepository)
     {
-        parent::__construct($friendsRepository);
+        parent::__construct($friendRepository);
     }
 
     /**
@@ -33,11 +32,11 @@ class FriendsService extends AbstractEntityService
             return "L'utilisateur n'existe pas.";
         }
 
-        if ($user->getFriends()->contains($entity->getFriend())) {
-            return "Vous êtes déjà amis avec cet utilisateur.";
-        }
+        // if ($user->getFriends()->contains($entity->getFriend())) {
+        //     return "Vous êtes déjà amis avec cet utilisateur.";
+        // }
 
-        $entity->setFriend($user);
+        // $entity->setFriend($user);
         return parent::add($dto, $entity);
     }
 }

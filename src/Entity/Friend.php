@@ -2,32 +2,20 @@
 
 namespace App\Entity;
 
-use App\DTO\Friends\AddFriendDto;
-use App\Repository\FriendsRepository;
+use App\DTO\Friend\AddFriendDto;
+use App\Repository\FriendRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FriendsRepository::class)]
-class Friends extends AbstractEntity
+#[ORM\Entity(repositoryClass: FriendRepository::class)]
+class Friend extends AbstractEntity
 {
-    #[ORM\ManyToOne(inversedBy: 'friends')]
+    #[ORM\ManyToOne(inversedBy: 'friend')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user1 = null;
 
-    #[ORM\ManyToOne(inversedBy: 'friends')]
+    #[ORM\ManyToOne(inversedBy: 'friend')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user2 = null;
-
-    public function __construct()
-    {
-        $this->user1 = User::class;
-        $this->user2 = User::class;
-    }
-
-    public function setFromAddDto(AddFriendDto $dto, User $user): void
-    {
-        $this->setUser1($user);
-        $this->setUser2($dto->friend);
-    }
 
     public function getUser1(): ?User
     {

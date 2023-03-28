@@ -49,7 +49,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: DiscussionMessage::class)]
     private Collection $discussionMessages;
 
-    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Friends::class)]
+    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Friend::class)]
     private Collection $friends;
 
     /**
@@ -231,14 +231,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Friends>
+     * @return Collection<int, Friend>
      */
     public function getFriends(): Collection
     {
         return $this->friends;
     }
 
-    public function addFriend(Friends $friend): self
+    public function addFriend(Friend $friend): self
     {
         if (!$this->friends->contains($friend)) {
             $this->friends->add($friend);
@@ -248,7 +248,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function removeFriend(Friends $friend): self
+    public function removeFriend(Friend $friend): self
     {
         if ($this->friends->removeElement($friend)) {
             // set the owning side to null (unless already changed)

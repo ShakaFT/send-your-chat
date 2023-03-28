@@ -7,15 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/friends')]
-class FriendsController extends AbstractController
+class FriendController extends AbstractController
 {
-    
-
-    #[Route('/friends', name: 'app_friends')]
+    #[Route('/', name: 'get_friends')]
     public function index(): Response
     {
-        return $this->render('friends/index.html.twig', [
-            'controller_name' => 'FriendsController',
+        return $this->render('friend/friends.html.twig', [
+
         ]);
     }
 }
