@@ -100,11 +100,13 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Server>
+     * @return array<int, Server>
      */
-    public function getChats(): Collection
+    public function getChats(): array
     {
-        return $this->servers;
+        $chats = [...$this->servers, ...$this->discussions];
+        if ($chats) usort($chats, function($a, $b) {return strcmp($b->getLastInteraction(), $a->getLastInteraction());});
+        return $chats;
     }
 
     public function addServer(Server $server): self

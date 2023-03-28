@@ -67,6 +67,8 @@ class ChatController extends AbstractController
         $message->setContent($request->query->get('message'));
         $this->serverMessageService->send($message, $this->getUser());
 
+        $this->serverService->refreshLastInteraction($currentChat);
+
         return $this->redirectToRoute('get_chats', [
             'currentChat' => $currentChat
         ]);

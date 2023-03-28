@@ -26,6 +26,9 @@ class Discussion
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: DiscussionMessage::class)]
     private Collection $discussionMessages;
 
+    #[ORM\Column]
+    private ?float $lastInteraction = null;
+
     public function __construct()
     {
         $this->discussionMessages = new ArrayCollection();
@@ -86,6 +89,18 @@ class Discussion
                 $discussionMessage->setDiscussion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastInteraction(): ?float
+    {
+        return $this->lastInteraction;
+    }
+
+    public function setLastInteraction(float $lastInteraction): self
+    {
+        $this->lastInteraction = $lastInteraction;
 
         return $this;
     }

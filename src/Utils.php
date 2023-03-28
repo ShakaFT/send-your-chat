@@ -21,6 +21,6 @@ class Utils
     }
 
     function getCurrentChat(Request $request, $chats) {
-        return $request->query->get("currentChat") ?? strval($chats->getValues() ? $chats[0]->getId() : "");
+        return $request->query->get("currentChat") ?? strval($chats ? $chats[0]->getId() : "");
     }
 }

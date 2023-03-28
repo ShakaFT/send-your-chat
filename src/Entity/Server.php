@@ -26,6 +26,9 @@ class Server extends AbstractEntity
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: ServerMessage::class)]
     private Collection $serverMessages;
 
+    #[ORM\Column]
+    private ?float $lastInteraction = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -115,6 +118,18 @@ class Server extends AbstractEntity
                 $serverMessage->setServer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastInteraction(): ?float
+    {
+        return $this->lastInteraction;
+    }
+
+    public function setLastInteraction(float $lastInteraction): self
+    {
+        $this->lastInteraction = $lastInteraction;
 
         return $this;
     }
