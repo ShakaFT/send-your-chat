@@ -27,11 +27,17 @@
 					<span class="fs-4">Mes chats</span>
 				</a>
 
+				<hr>
+
+				<button class="btn btn-primary w-100" type="button">
+					Nouvelle discusion
+					<i class="fas fa-plus mx-2"></i>
+				</button>
+
 				<ul class="nav nav-pills flex-column mb-auto">
 					{% for chat in chats %}
 						<li class="nav-item">
-							<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}"
-							class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
+							<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
 								<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
 								{{ chat.name }}
 							</a>
@@ -52,9 +58,6 @@
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
 							<li>
-								<a class="dropdown-item" href={{ path('settings_chats') }}>Settings</a>
-							</li>
-							<li>
 								<a class="dropdown-item" href="{{path('edit_user')}}">Profile</a>
 							</li>
 							<li>
@@ -65,7 +68,7 @@
 							</li>
 							<li><hr class="dropdown-divider"></li>
 							<li>
-								<a class="dropdown-item" href="{{path('security_logout')}}">Sign out</a>
+								<a class="dropdown-item" href="{{path('security_logout')}}">Déconnexion</a>
 							</li>
 						</ul>
 					</div>
@@ -76,7 +79,16 @@
 			<div class="col-sm-9 d-flex vh-100">
 				<div class="d-flex flex-column justify-content-between">
 					<div class="p-3 m-3 rounded-3">
-						<h4 class="text-center">Chat</h4>
+						<div class="row align-items-center mb-2">
+							<div class="col-6">
+								<h4 class="text-white">Chat</h4>
+							</div>
+							<div class="col-6">
+								<a href="{{ path('settings_chat', {'currentChat': currentChat}) }}">
+									<i class="fas fa-gear fa-lg text-white float-end"></i>
+								</a>
+							</div>
+						</div>
 						<!-- Start of chat -->
 						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
 							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
