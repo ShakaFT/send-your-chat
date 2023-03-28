@@ -26,49 +26,29 @@
 					<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
 					<span class="fs-4">Mes chats</span>
 				</a>
-				<hr>
+
 				<ul class="nav nav-pills flex-column mb-auto">
-					<li class="nav-item">
-						<a href="#" class="nav-link active" aria-current="page">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-							Chat 1
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-							Chat 2
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-							Chat 3
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-							Chat 4
-						</a>
-					</li>
-					<li>
-						<a href="#" class="nav-link text-white">
-							<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-							Chat 5
-						</a>
-					</li>
+					{% for chat in chats %}
+						<li class="nav-item">
+							<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}"
+							class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
+								<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+								{{ chat.name }}
+							</a>
+						</li>
+					{% endfor %}
 				</ul>
+
 				<div class="position-sticky bottom-0">
 					<div class="button-container">
-						<a href="{{ path('create_chats') }}" class="btn btn-primary">Créer un chat</a>
-						<a href="{{ path('join_chats') }}" class="btn btn-outline-primary">Rejoindre un chat</a>
+						<a href="{{ path('create_chats', {'currentChat': currentChat}) }}" class="btn btn-primary">Créer un chat</a>
+						<a href="{{ path('join_chats', {'currentChat': currentChat}) }}" class="btn btn-outline-primary">Rejoindre un chat</a>
 					</div>
 					<hr>
 					<div class="dropdown mb-2">
 						<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="https://github.com/varlopecar.png" alt="" width="32" height="32" class="rounded-circle me-2">
-							<strong>varlopecar</strong>
+							<strong>{{ username }}</strong>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
 							<li>

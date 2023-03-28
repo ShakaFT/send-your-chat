@@ -31,7 +31,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 
 				</div>
 				<div class="modal-footer">
-					<a href="{{ path('get_chats') }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
 					<button type="submit" class="btn btn-primary">
 						{{ confirmationTitle }}</button>
 				</div>
