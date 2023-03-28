@@ -15,7 +15,7 @@ class SendMessageType extends AbstractType
         $builder
             ->add('message', TextType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
         ;
     }
