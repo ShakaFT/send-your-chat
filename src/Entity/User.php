@@ -30,11 +30,27 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         $this->servers = new ArrayCollection();
         $this->roles = 'ROLE_USER';
+        $this->discussions = new ArrayCollection();
+        $this->serverMessages = new ArrayCollection();
+        $this->discussionMessages = new ArrayCollection();
+        $this->friends = new ArrayCollection();
     }
 
 
     #[ORM\ManyToMany(targetEntity: Server::class, mappedBy: 'users')]
     private Collection $servers;
+
+    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Discussion::class)]
+    private Collection $discussions;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ServerMessage::class)]
+    private Collection $serverMessages;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: DiscussionMessage::class)]
+    private Collection $discussionMessages;
+
+    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Friends::class)]
+    private Collection $friends;
 
     /**
 	 * @param UserDto $dto
@@ -122,5 +138,125 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getUserIdentifier(): string
     {
         return $this->getEmail();
+    }
+
+    /**
+     * @return Collection<int, Discussion>
+     */
+    public function getDiscussions(): Collection
+    {
+        return $this->discussions;
+    }
+
+    public function addDiscussion(Discussion $discussion): self
+    {
+        if (!$this->discussions->contains($discussion)) {
+            $this->discussions->add($discussion);
+            $discussion->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscussion(Discussion $discussion): self
+    {
+        if ($this->discussions->removeElement($discussion)) {
+            // set the owning side to null (unless already changed)
+            if ($discussion->getUser1() === $this) {
+                $discussion->setUser1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ServerMessage>
+     */
+    public function getServerMessages(): Collection
+    {
+        return $this->serverMessages;
+    }
+
+    public function addServerMessage(ServerMessage $serverMessage): self
+    {
+        if (!$this->serverMessages->contains($serverMessage)) {
+            $this->serverMessages->add($serverMessage);
+            $serverMessage->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServerMessage(ServerMessage $serverMessage): self
+    {
+        if ($this->serverMessages->removeElement($serverMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($serverMessage->getUser() === $this) {
+                $serverMessage->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiscussionMessage>
+     */
+    public function getDiscussionMessages(): Collection
+    {
+        return $this->discussionMessages;
+    }
+
+    public function addDiscussionMessage(DiscussionMessage $discussionMessage): self
+    {
+        if (!$this->discussionMessages->contains($discussionMessage)) {
+            $this->discussionMessages->add($discussionMessage);
+            $discussionMessage->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscussionMessage(DiscussionMessage $discussionMessage): self
+    {
+        if ($this->discussionMessages->removeElement($discussionMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($discussionMessage->getUser() === $this) {
+                $discussionMessage->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friends>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
+    }
+
+    public function addFriend(Friends $friend): self
+    {
+        if (!$this->friends->contains($friend)) {
+            $this->friends->add($friend);
+            $friend->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFriend(Friends $friend): self
+    {
+        if ($this->friends->removeElement($friend)) {
+            // set the owning side to null (unless already changed)
+            if ($friend->getUser1() === $this) {
+                $friend->setUser1(null);
+            }
+        }
+
+        return $this;
     }
 }

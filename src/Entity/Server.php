@@ -23,9 +23,13 @@ class Server extends AbstractEntity
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: ServerMessage::class)]
+    private Collection $serverMessages;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->serverMessages = new ArrayCollection();
     }
 
     public function setFromCreateDto(CreateServerDto $dto): void {
@@ -81,6 +85,36 @@ class Server extends AbstractEntity
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ServerMessage>
+     */
+    public function getServerMessages(): Collection
+    {
+        return $this->serverMessages;
+    }
+
+    public function addServerMessage(ServerMessage $serverMessage): self
+    {
+        if (!$this->serverMessages->contains($serverMessage)) {
+            $this->serverMessages->add($serverMessage);
+            $serverMessage->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServerMessage(ServerMessage $serverMessage): self
+    {
+        if ($this->serverMessages->removeElement($serverMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($serverMessage->getServer() === $this) {
+                $serverMessage->setServer(null);
+            }
+        }
 
         return $this;
     }
