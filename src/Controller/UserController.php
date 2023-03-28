@@ -28,7 +28,7 @@ class UserController extends AbstractController
 	}
 
 	#[Route('/add', name: 'add_user', methods: ['GET', 'POST'])]
-	public function add(Request $request): Response
+	public function add(Request $request, Security $security): Response
 	{
 		/** @var User $user */
 		$user = $this->getUser();
@@ -47,7 +47,10 @@ class UserController extends AbstractController
 			$user = new User();
 			$error = $this->userService->add($userDto, $user);
 
-			if (!$error) return $this->redirectToRoute('add_user');
+			if (!$error) {
+				$security->login($user);
+				return $this->redirectToRoute('add_user');
+			} 
 		}
 
 		return $this->render('users/add.html.twig', [
