@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\DTO\SendMessageDto;
 use App\DTO\Server\CreateServerDto;
 use App\DTO\Server\JoinServerDto;
 use App\Entity\Server;
+use App\Entity\ServerMessage;
 use App\Entity\User;
+use App\Form\SendMessageType;
+use App\Services\ServerMessageService;
 use App\Utils;
 use App\Form\Server\CreateServerType;
 use App\Form\Server\JoinServerType;
@@ -19,19 +23,47 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChatController extends AbstractController
 {
     private ServerService $serverService;
+    private ServerMessageService $serverMessageService;
     private Utils $utils;
 
-    public function __construct(ServerService $serverService, Utils $utils)
+    public function __construct(ServerService $serverService, ServerMessageService $serverMessageService, Utils $utils)
     {
         $this->serverService = $serverService;
+        $this->serverMessageService = $serverMessageService;
         $this->utils = $utils;
     }
 
-    #[Route('/', name: 'get_chats', methods: ["GET"])]
+    #[Route('/', name: 'get_chats', methods: ["GET", "POST"])]
     public function get_chats(Request $request): Response
     {
+        $sendMessageDto = new SendMessageDto();
+        $form = $this->createForm(SendMessageType::class, $sendMessageDto);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('send_message', [
+                'currentChat' => $request->query->get('currentChat'),
+                'message' => $sendMessageDto->message,
+            ]);
+        }
+
         return $this->render('chat/chats.html.twig', [
-            ...$this->utils->chats_render($request, $this->getUser()),
+            ...$this->utils->chats_render($request, $this->getUser(), $form),
+        ]);
+    }
+
+    #[Route('/send_message', name: 'send_message', methods: ["GET", "POST"])]
+    public function send_message(Request $request): Response
+    {
+        $currentChat = $request->query->get('currentChat');
+
+        $message = new ServerMessage();
+        $message->setServer($this->serverService->getById($currentChat));
+        $message->setContent($request->query->get('message'));
+        $this->serverMessageService->send($message, $this->getUser());
+
+        return $this->redirectToRoute('get_chats', [
+            'currentChat' => $currentChat
         ]);
     }
 
@@ -86,6 +118,7 @@ class ChatController extends AbstractController
             'modalTitle' => 'Créer un serveur',
         ]);
     }
+
 
     // #[Route('/server/update', name: 'update_server', methods: ["GET", "POST"])]
     // public function update_server(): Response

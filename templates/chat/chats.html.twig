@@ -75,7 +75,7 @@
 				</div>
 			</div>
 			<!-- End of sidebar -->
-
+			{% if formMessage is defined and formMessage is not null %}
 			<div class="col-sm-9 d-flex vh-100">
 				<div class="d-flex flex-column justify-content-between">
 					<div class="p-3 m-3 rounded-3">
@@ -143,15 +143,20 @@
 							</ul>
 						</div>
 						<!-- End of chat -->
-						<form class="flex-shrink-0 mb-2 position-sticky bottom-0">
+						{{ form_start(formMessage) }}
+						{{ form_widget(formMessage.message) }}
+						<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+						{{ form_end(formMessage) }}
+						{# <form class="flex-shrink-0 mb-2 position-sticky bottom-0">
 							<div class="form-group">
 								<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
 							</div>
-							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
-						</form>
+							<button type="submit" href="{{  }}" class="btn btn-primary mt-2">Envoyer</button>
+						</form> #}
 					</div>
 				</div>
 			</div>
+			{% endif %}
 		</div>
 		<!-- End of row -->
 	</div>

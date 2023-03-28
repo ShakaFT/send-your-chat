@@ -7,18 +7,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ServerMessageRepository::class)]
-class ServerMessage
+class ServerMessage extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $timestamp = null;
 
     #[ORM\ManyToOne(inversedBy: 'serverMessages')]
     #[ORM\JoinColumn(nullable: false)]
@@ -28,10 +21,8 @@ class ServerMessage
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    #[ORM\Column]
+    private ?float $timestamp = null;
 
     public function getContent(): ?string
     {
@@ -41,18 +32,6 @@ class ServerMessage
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getTimestamp(): ?\DateTimeInterface
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(\DateTimeInterface $timestamp): self
-    {
-        $this->timestamp = $timestamp;
 
         return $this;
     }
@@ -77,6 +56,18 @@ class ServerMessage
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?float
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(float $timestamp): self
+    {
+        $this->timestamp = $timestamp;
 
         return $this;
     }

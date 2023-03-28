@@ -53,4 +53,9 @@ class ServerService extends AbstractEntityService
 
 		return $error;
 	}
+
+	public function getById(int $id) : Server
+	{
+		return $this->repository->findById($id)[0];
+	}
 }

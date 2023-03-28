@@ -17,9 +17,6 @@ class DiscussionMessage
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $timestamp = null;
-
     #[ORM\ManyToOne(inversedBy: 'discussionMessages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Discussion $discussion = null;
@@ -27,6 +24,9 @@ class DiscussionMessage
     #[ORM\ManyToOne(inversedBy: 'discussionMessages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\Column]
+    private ?float $timestamp = null;
 
     public function getId(): ?int
     {
@@ -41,18 +41,6 @@ class DiscussionMessage
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getTimestamp(): ?\DateTimeInterface
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(\DateTimeInterface $timestamp): self
-    {
-        $this->timestamp = $timestamp;
 
         return $this;
     }
@@ -77,6 +65,18 @@ class DiscussionMessage
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?float
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(float $timestamp): self
+    {
+        $this->timestamp = $timestamp;
 
         return $this;
     }
