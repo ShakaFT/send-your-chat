@@ -36,19 +36,22 @@ class ChatController extends AbstractController
     #[Route('/', name: 'get_chats', methods: ["GET", "POST"])]
     public function get_chats(Request $request): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $sendMessageDto = new SendMessageDto();
         $form = $this->createForm(SendMessageType::class, $sendMessageDto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->redirectToRoute('send_message', [
-                'currentChat' => $request->query->get('currentChat'),
+                'currentChat' => $this->utils->getCurrentChat($request, $user->getChats()),
                 'message' => $sendMessageDto->message,
             ]);
         }
 
         return $this->render('chat/chats.html.twig', [
-            ...$this->utils->chats_render($request, $this->getUser(), $form),
+            ...$this->utils->chatsRender($request, $user, $form),
         ]);
     }
 
@@ -82,7 +85,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chats_render($request, $this->getUser()),
+            ...$this->utils->chatsRender($request, $this->getUser()),
             'confirmationTitle' => 'Rejoindre',
             'error' => $error,
             'form' => $form,
@@ -111,7 +114,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chats_render($request, $this->getUser()),
+            ...$this->utils->chatsRender($request, $this->getUser()),
             'confirmationTitle' => 'Créer',
             'error' => '',
             'form' => $form,

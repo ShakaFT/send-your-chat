@@ -78,7 +78,7 @@ class UserController extends AbstractController
 		}
 
 		return $this->render('shared/modal.html.twig', [
-			...$this->utils->chats_render($request, $this->getUser()),
+			...$this->utils->chatsRender($request, $this->getUser()),
 			'confirmationTitle' => 'Modifier',
 			'error' => $error,
 			'background' => 'chats',
@@ -104,7 +104,7 @@ class UserController extends AbstractController
 		}
 
 		return $this->render('shared/modal.html.twig', [
-			...$this->utils->chats_render($request, $this->getUser()),
+			...$this->utils->chatsRender($request, $this->getUser()),
 			'confirmationTitle' => 'Réinitialiser',
 			'error' => $error,
 			'background' => 'chats',
@@ -124,7 +124,7 @@ class UserController extends AbstractController
 			return $this->redirectToRoute("security_login");
 		}
 		return $this->render('shared/alert.html.twig', [
-			...$this->utils->chats_render($request, $this->getUser()),
+			...$this->utils->chatsRender($request, $this->getUser()),
 			'alertTitle' => 'Supprimer le compte',
 			'background' => 'chats',
 			'confirmationTitle' => 'Supprimer',
