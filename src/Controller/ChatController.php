@@ -42,16 +42,18 @@ class ChatController extends AbstractController
         $sendMessageDto = new SendMessageDto();
         $form = $this->createForm(SendMessageType::class, $sendMessageDto);
         $form->handleRequest($request);
+        $currentChat =  $this->utils->getCurrentChat($request, $user->getChats());
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->redirectToRoute('send_message', [
-                'currentChat' => $this->utils->getCurrentChat($request, $user->getChats()),
+                'currentChat' => $currentChat,
                 'message' => $sendMessageDto->message,
             ]);
-        }
+        }    
 
         return $this->render('chat/chats.html.twig', [
             ...$this->utils->chatsRender($request, $user, $form),
+            'messages' => $currentChat ? $this->serverService->getById($currentChat)->getServerMessages() : []
         ]);
     }
 

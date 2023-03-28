@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ServerMessageRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -63,6 +64,32 @@ class ServerMessage extends AbstractEntity
     public function getTimestamp(): ?float
     {
         return $this->timestamp;
+    }
+
+    public function getTimeSinceNow(): string
+    {
+
+        $now = new DateTimeImmutable();
+        $nowAtMidnight = new DateTimeImmutable('today midnight');
+
+        $messageTimestampSinceNow = ($now->getTimestamp() - $this->timestamp);
+        $timestampSinceNow = ($now->getTimestamp() - $nowAtMidnight->getTimestamp());
+
+        if ($messageTimestampSinceNow < 60) {
+            return "À l'instant";
+        }
+
+        if ($messageTimestampSinceNow > $timestampSinceNow) {
+            return date('Y-m-d H:i', $messageTimestampSinceNow);
+        }
+
+        if ($messageTimestampSinceNow < 3600) {
+            $timeSince = sprintf("%d", date('i', $messageTimestampSinceNow));
+            return "Il y a $timeSince min";
+        }
+
+        $timeSince = sprintf("%d", date('H', $messageTimestampSinceNow));
+        return "Il y a {$timeSince}h";
     }
 
     public function setTimestamp(float $timestamp): self

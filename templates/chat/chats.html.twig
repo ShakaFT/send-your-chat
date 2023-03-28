@@ -76,86 +76,74 @@
 			</div>
 			<!-- End of sidebar -->
 			{% if formMessage is not null and currentChat %}
-			<div class="col-sm-9 d-flex vh-100">
-				<div class="d-flex flex-column justify-content-between">
-					<div class="p-3 m-3 rounded-3">
-						<div class="row align-items-center mb-2">
-							<div class="col-6">
-								<h4 class="text-white">Chat</h4>
+				<div class="col-sm-9 d-flex vh-100">
+					<div class="d-flex flex-column justify-content-between">
+						<div class="p-3 m-3 rounded-3">
+							<div class="row align-items-center mb-2">
+								<div class="col-6">
+									<h4 class="text-white">Chat</h4>
+								</div>
+								<div class="col-6">
+									<a href="{{ path('settings_chat', {'chat': currentChat}) }}">
+										<i class="fas fa-gear fa-lg text-white float-end"></i>
+									</a>
+								</div>
 							</div>
-							<div class="col-6">
-								<a href="{{ path('settings_chat', {'chat': currentChat}) }}">
-									<i class="fas fa-gear fa-lg text-white float-end"></i>
-								</a>
+							<!-- Start of chat -->
+							<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
+								<ul
+									class="list-unstyled d-flex justify-content-center flex-column m-auto">
+									{# <li class="d-flex justify-content-between mb-4">
+																		<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+																		<div class="card text-bg-light">
+																			<div class="card-header d-flex justify-content-between p-3">
+																				<p class="fw-bold mb-0">Brad Pitt</p>
+																				<p class="text-muted small mb-0">
+																					<i class="far fa-clock"></i>
+																					10 mins ago</p>
+																			</div>
+																			<div class="card-body">
+																				<p class="mb-0">
+																					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+																				</p>
+																			</div>
+																		</div>
+																	</li> #}
+
+									{% for message in messages %}
+										<li class="d-flex justify-content-between mb-4">
+											<div class="card w-100 text-bg-light">
+												<div class="card-header d-flex justify-content-between p-3">
+													<p class="fw-bold mb-0">{{ message.getUser().getUsername() }}</p>
+													<p class="text-muted small mb-0">
+														<i class="far fa-clock"></i>
+														{{ message.getTimeSinceNow() }}</p>
+												</div>
+												<div class="card-body">
+													<p class="mb-0">
+														{{ message.getContent() }}
+													</p>
+												</div>
+											</div>
+											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+										</li>
+									{% endfor %}
+								</ul>
 							</div>
+							<!-- End of chat -->
+							{{ form_start(formMessage) }}
+							{{ form_widget(formMessage.message) }}
+							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
+							{{ form_end(formMessage) }}
+							{# <form class="flex-shrink-0 mb-2 position-sticky bottom-0">
+														<div class="form-group">
+															<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
+														</div>
+														<button type="submit" href="{{  }}" class="btn btn-primary mt-2">Envoyer</button>
+													</form> #}
 						</div>
-						<!-- Start of chat -->
-						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
-							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
-								<li class="d-flex justify-content-between mb-4">
-									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-									<div class="card text-bg-light">
-										<div class="card-header d-flex justify-content-between p-3">
-											<p class="fw-bold mb-0">Brad Pitt</p>
-											<p class="text-muted small mb-0">
-												<i class="far fa-clock"></i>
-												10 mins ago</p>
-										</div>
-										<div class="card-body">
-											<p class="mb-0">
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-											</p>
-										</div>
-									</div>
-								</li>
-								<li class="d-flex justify-content-between mb-4">
-									<div class="card w-100 text-bg-light">
-										<div class="card-header d-flex justify-content-between p-3">
-											<p class="fw-bold mb-0">Lara Croft</p>
-											<p class="text-muted small mb-0">
-												<i class="far fa-clock"></i>
-												13 mins ago</p>
-										</div>
-										<div class="card-body">
-											<p class="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-											</p>
-										</div>
-									</div>
-									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
-								</li>
-								<li class="d-flex justify-content-between mb-4">
-									<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-									<div class="card text-bg-light">
-										<div class="card-header d-flex justify-content-between p-3">
-											<p class="fw-bold mb-0">Brad Pitt</p>
-											<p class="text-muted small mb-0">
-												<i class="far fa-clock"></i>
-												10 mins ago</p>
-										</div>
-										<div class="card-body">
-											<p class="mb-0">
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-											</p>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
-						<!-- End of chat -->
-						{{ form_start(formMessage) }}
-						{{ form_widget(formMessage.message) }}
-						<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
-						{{ form_end(formMessage) }}
-						{# <form class="flex-shrink-0 mb-2 position-sticky bottom-0">
-							<div class="form-group">
-								<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
-							</div>
-							<button type="submit" href="{{  }}" class="btn btn-primary mt-2">Envoyer</button>
-						</form> #}
 					</div>
 				</div>
-			</div>
 			{% endif %}
 		</div>
 		<!-- End of row -->
