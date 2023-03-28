@@ -38,7 +38,7 @@
 					<ul class="nav nav-pills flex-column">
 						{% for chat in chats %}
 							<li class="nav-item">
-								<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
+								<a href="{{ path('get_chats', {'currentChat': chat.getId(), 'typeChat': chat.getType()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
 									<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
 									{{ chat.name }}
 								</a>

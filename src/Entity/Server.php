@@ -92,6 +92,11 @@ class Server extends AbstractEntity
         return $this;
     }
 
+    public function getType(): string
+    {
+        return 'server';
+    }
+
     /**
      * @return Collection<int, ServerMessage>
      */

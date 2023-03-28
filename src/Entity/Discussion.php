@@ -8,13 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
-class Discussion
+class Discussion extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'discussions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user1 = null;
@@ -32,11 +27,6 @@ class Discussion
     public function __construct()
     {
         $this->discussionMessages = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getUser1(): ?User
@@ -61,6 +51,11 @@ class Discussion
         $this->user2 = $user2;
 
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return 'discussion';
     }
 
     /**
