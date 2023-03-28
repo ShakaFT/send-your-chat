@@ -9,6 +9,7 @@ use App\Form\ResetPasswordType;
 use App\Form\UserType;
 use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,7 +106,7 @@ class UserController extends AbstractController
 	}
 
 	#[Route('/delete', name: 'delete_user', methods: ['GET', 'POST'])]
-	public function deleteAccount(Request $request): Response
+	public function deleteAccount(): Response
 	{
 		return $this->render('shared/alert.html.twig', [
             'alertTitle' => 'Supprimer le compte',
@@ -117,12 +118,12 @@ class UserController extends AbstractController
 	}
 
 	#[Route('/confirm_delete', name: 'confirm_delete_user', methods: ['GET', 'POST'])]
-	public function confirmDeleteAccount(Request $request): Response
+	public function confirmDeleteAccount(Security $security): Response
 	{
 		/** @var User $user */
 		$user = $this->getUser();
+		$security->logout(false);
 		$this->userService->delete($user);
-
-		return $this->render('chats/get_chats.html.twig');
+		return $this->redirectToRoute("security_login");
 	}
 }
