@@ -2,26 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\AbstractEntity;
-use App\Entity\Chat;
+use App\Entity\Server;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  *
- * @method Chat|null find($id, $lockMode = null, $lockVersion = null)
- * @method Chat|null findOneBy(array $criteria, array $orderBy = null)
- * @method Chat[]    findAll()
- * @method Chat[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Server|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Server|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Server[]    findAll()
+ * @method Server[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ChatRepository extends AbstractRepository
+class ServerRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Chat::class);
+        parent::__construct($registry, Server::class);
     }
 
 //    /**
-//     * @return Chat[] Returns an array of Chat objects
+//     * @return Server[] Returns an array of Server objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -35,7 +34,7 @@ class ChatRepository extends AbstractRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Chat
+//    public function findOneBySomeField($value): ?Server
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

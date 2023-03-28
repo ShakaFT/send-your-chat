@@ -26,18 +26,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(length: 255)]
     private ?string $roles = null;
 
-    #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
-    private Collection $chats;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]
-    private Collection $messages;
-
     public function __construct()
     {
-        $this->chats = new ArrayCollection();
+        $this->servers = new ArrayCollection();
         $this->roles = 'ROLE_USER';
-        $this->messages = new ArrayCollection();
     }
+
+
+    #[ORM\ManyToMany(targetEntity: Server::class, mappedBy: 'users')]
+    private Collection $servers;
 
     /**
 	 * @param UserDto $dto
@@ -87,57 +84,27 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Chat>
+     * @return Collection<int, Server>
      */
     public function getChats(): Collection
     {
-        return $this->chats;
+        return $this->servers;
     }
 
-    public function addChat(Chat $chat): self
+    public function addServer(Server $server): self
     {
-        if (!$this->chats->contains($chat)) {
-            $this->chats->add($chat);
-            $chat->addUser($this);
+        if (!$this->servers->contains($server)) {
+            $this->servers->add($server);
+            $server->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeChat(Chat $chat): self
+    public function removeServer(Server $server): self
     {
-        if ($this->chats->removeElement($chat)) {
-            $chat->removeUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): self
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): self
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getUser() === $this) {
-                $message->setUser(null);
-            }
+        if ($this->servers->removeElement($server)) {
+            $server->removeUser($this);
         }
 
         return $this;

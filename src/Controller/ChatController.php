@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\DTO\Chat\CreateChatDto;
-use App\DTO\Chat\JoinChatDto;
-use App\Entity\Chat;
+use App\DTO\Server\CreateServerDto;
+use App\DTO\Server\JoinServerDto;
+use App\Entity\Server;
 use App\Entity\User;
 use App\Utils;
-use App\Form\Chat\CreateChatType;
-use App\Form\Chat\JoinChatType;
-use App\Services\ChatService;
+use App\Form\Server\CreateServerType;
+use App\Form\Server\JoinServerType;
+use App\Services\ServerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/chats")]
 class ChatController extends AbstractController
 {
-    private ChatService $chatService;
+    private ServerService $serverService;
     private Utils $utils;
 
-    public function __construct(ChatService $chatService, Utils $utils)
+    public function __construct(ServerService $serverService, Utils $utils)
     {
-        $this->chatService = $chatService;
+        $this->serverService = $serverService;
         $this->utils = $utils;
     }
 
@@ -35,21 +35,17 @@ class ChatController extends AbstractController
         ]);
     }
 
-    #[Route('/join', name: 'join_chats', methods: ["GET", "POST"])]
-    public function join_chats(Request $request): Response
+    #[Route('/server/join', name: 'join_server', methods: ["GET", "POST"])]
+    public function join_server(Request $request): Response
     {
-        /** @var User $currentUser */
-        $currentUser = $this->getUser();
-        $chats = $currentUser->getChats();
-
-        $chatDto = new JoinChatDto();
+        $serverDto = new JoinServerDto();
         $error = "";
 
-        $form = $this->createForm(JoinChatType::class, $chatDto);
+        $form = $this->createForm(JoinServerType::class, $serverDto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $error = $this->chatService->join($chatDto, $this->getUser());
+            $error = $this->serverService->join($serverDto, $this->getUser());
             if (!$error) return $this->redirectToRoute('get_chats');
         }
 
@@ -58,56 +54,54 @@ class ChatController extends AbstractController
             'confirmationTitle' => 'Rejoindre',
             'error' => $error,
             'form' => $form,
-            'modalTitle' => 'Rejoindre un chat',
+            'modalTitle' => 'Rejoindre un serveur',
         ]);
     }
 
-    #[Route('/create', name: 'create_chats', methods: ["GET", "POST"])]
-    public function create_chats(Request $request): Response
+    #[Route('/server/create', name: 'create_server', methods: ["GET", "POST"])]
+    public function create_server(Request $request): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
         $chats = $currentUser->getChats();
 
-        $chatDto = new CreateChatDto();
+        $serverDto = new CreateServerDto();
 
-        $form = $this->createForm(CreateChatType::class, $chatDto);
+        $form = $this->createForm(CreateServerType::class, $serverDto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $chat = new Chat();
-            $chat->addUser($this->getUser());
-            $error = $this->chatService->add($chatDto, $chat);
+            $server = new Server();
+            $server->addUser($this->getUser());
+            $error = $this->serverService->add($serverDto, $server);
 
             if (!$error) return $this->redirectToRoute('get_chats');
         }
-
-        $test = [];
 
         return $this->render('shared/modal.html.twig', [
             ...$this->utils->chats_render($request, $this->getUser()),
             'confirmationTitle' => 'Créer',
             'error' => '',
             'form' => $form,
-            'modalTitle' => 'Créer un chat',
+            'modalTitle' => 'Créer un serveur',
         ]);
     }
 
-    #[Route('/update', name: 'update_chats', methods: ["GET", "POST"])]
-    public function update_chats(): Response
-    {
-        return $this->render('chat/chats.html.twig', [
-            'controller_name' => 'UpdateChats',
-        ]);
-    }
+    // #[Route('/server/update', name: 'update_server', methods: ["GET", "POST"])]
+    // public function update_server(): Response
+    // {
+    //     return $this->render('chat/chats.html.twig', [
+    //         'controller_name' => 'UpdateChats',
+    //     ]);
+    // }
 
-    #[Route('/delete', name: 'delete_chats', methods: ["GET", "POST"])]
-    public function delete_chats(): Response
-    {
-        return $this->render('chat/chats.html.twig', [
-            'controller_name' => 'DeleteChats',
-        ]);
-    }
+    // #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
+    // public function delete_server(): Response
+    // {
+    //     return $this->render('chat/chats.html.twig', [
+    //         'controller_name' => 'DeleteChats',
+    //     ]);
+    // }
 
     #[Route('/settings', name: 'settings_chats', methods: ["GET", "POST"])]
     public function settings_chats(): Response

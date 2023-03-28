@@ -2,26 +2,23 @@
 
 namespace App\Entity;
 
-use App\DTO\Chat\CreateChatDto;
-use App\DTO\Chat\JoinChatDto;
-use App\Repository\ChatRepository;
+use App\DTO\Server\CreateServerDto;
+use App\DTO\Server\JoinServerDto;
+use App\Repository\ServerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: ChatRepository::class)]
-class Chat extends AbstractEntity
+#[ORM\Entity(repositoryClass: ServerRepository::class)]
+class Server extends AbstractEntity
 {
 
     #[ORM\Column(length: 255)]
     private ?string $token = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'chats')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
     private Collection $users;
-
-    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class)]
-    private Collection $messages;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -29,15 +26,14 @@ class Chat extends AbstractEntity
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->messages = new ArrayCollection();
     }
 
-    public function setFromCreateDto(CreateChatDto $dto): void {
+    public function setFromCreateDto(CreateServerDto $dto): void {
         $this->setName($dto->name);
         $this->setToken(Uuid::v4());
 	}
 
-    public function setFromJoinDto(JoinChatDto $dto): void {
+    public function setFromJoinDto(JoinServerDto $dto): void {
         $this->setToken($dto->token);
 	}
 
@@ -73,36 +69,6 @@ class Chat extends AbstractEntity
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): self
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setChat($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): self
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getChat() === $this) {
-                $message->setChat(null);
-            }
-        }
 
         return $this;
     }

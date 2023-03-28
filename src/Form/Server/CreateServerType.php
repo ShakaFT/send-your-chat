@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Form\Chat;
+namespace App\Form\Server;
 
-use App\DTO\Chat\JoinChatDto;
+use App\DTO\Server\CreateServerDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class JoinChatType extends AbstractType
+class CreateServerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('token', TextType::class, [
-				'label' => "Code d'invitation"
+            ->add('name', TextType::class, [
+				'label' => 'Nom du serveur'
 			])
         ;
     }
@@ -22,7 +22,7 @@ class JoinChatType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => JoinChatDto::class,
+            'data_class' => CreateServerDto::class,
         ]);
     }
 }
