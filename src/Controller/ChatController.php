@@ -109,11 +109,11 @@ class ChatController extends AbstractController
         ]);
     }
 
-    #[Route('/settings', name: 'settings_chats', methods: ["GET", "POST"])]
-    public function settings_chats(): Response
+    #[Route('/settings', name: 'settings_chat', methods: ["GET", "POST"])]
+    public function settings_chat(): Response
     {
         return $this->render('chat/settings.html.twig', [
-            'controller_name' => 'SettingsChats',
+            'controller_name' => 'SettingsChat',
         ]);
     }
 }
