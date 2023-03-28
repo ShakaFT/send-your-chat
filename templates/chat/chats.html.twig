@@ -56,7 +56,7 @@
 					<div class="dropdown mb-2">
 						<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="https://github.com/varlopecar.png" alt="" width="32" height="32" class="rounded-circle me-2">
-							<strong>{{ username }}</strong>
+							<strong>{{ user.getUsername() }}</strong>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
 							<li>
@@ -96,6 +96,9 @@
 								<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
 									{% for message in messages %}
 										<li class="d-flex justify-content-between mb-4">
+											{% if message.getUser().getId() is not same as user.getId() %}
+												<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+											{% endif %}
 											<div class="card w-100 text-bg-light">
 												<div class="card-header d-flex justify-content-between p-3">
 													<p class="fw-bold mb-0">{{ message.getUser().getUsername() }}</p>
@@ -109,7 +112,9 @@
 													</p>
 												</div>
 											</div>
-											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+											{% if message.getUser().getId() is same as user.getId() %}
+												<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+											{% endif %}
 										</li>
 									{% endfor %}
 								</ul>
@@ -119,12 +124,6 @@
 							{{ form_widget(formMessage.message) }}
 							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
 							{{ form_end(formMessage) }}
-							{# <form class="flex-shrink-0 mb-2 position-sticky bottom-0">
-																					<div class="form-group">
-																						<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
-																					</div>
-																					<button type="submit" href="{{  }}" class="btn btn-primary mt-2">Envoyer</button>
-																				</form> #}
 						</div>
 					</div>
 				</div>
@@ -132,5 +131,4 @@
 		</div>
 		<!-- End of row -->
 	</div>
-
 {% endblock %}

@@ -21,6 +21,11 @@ class ServerMessageService extends AbstractEntityService
 	 */
 	public function send(AbstractEntity $entity, User $currentUser)
 	{
+		if (!$entity->getContent()) {
+			// We can't send empty message.
+			return;
+		}
+		
 		$date = new DateTimeImmutable();
 		$entity->setTimestamp($date->getTimestamp());
 		$entity->setUser($currentUser);

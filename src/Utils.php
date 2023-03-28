@@ -16,7 +16,7 @@ class Utils
             'chats' => $chats,
             'currentChat' => $this->getCurrentChat($request, $chats),
             'formMessage' => $form,
-            'username' => $currentUser->getUsername(),
+            'user' => $currentUser,
         ];
     }
 
