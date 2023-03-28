@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\ResetPasswordType;
 use App\Form\UserType;
 use App\Services\UserService;
+use App\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 	private UserService $userService;
+	private Utils $utils;
 
-	public function __construct(UserService $userService)
+	public function __construct(UserService $userService, Utils $utils)
 	{
 		$this->userService = $userService;
+		$this->utils = $utils;
 	}
 
 	#[Route('/add', name: 'add_user', methods: ['GET', 'POST'])]
@@ -72,12 +75,13 @@ class UserController extends AbstractController
 		}
 
 		return $this->render('shared/modal.html.twig', [
-            'confirmationTitle' => 'Modifier',
-            'error' => $error,
+			...$this->utils->chats_render($request, $this->getUser()),
+			'confirmationTitle' => 'Modifier',
+			'error' => $error,
 			'background' => 'chats',
-            'modalTitle' => 'Modifier le profil',
-            'form' => $form,
-        ]);
+			'modalTitle' => 'Modifier le profil',
+			'form' => $form,
+		]);
 	}
 	#[Route('/reset_password', name: 'reset_password', methods: ['GET', 'POST'])]
 	public function resetPassword(Request $request): Response
@@ -97,33 +101,32 @@ class UserController extends AbstractController
 		}
 
 		return $this->render('shared/modal.html.twig', [
-            'confirmationTitle' => 'Réinitialiser',
-            'error' => $error,
+			...$this->utils->chats_render($request, $this->getUser()),
+			'confirmationTitle' => 'Réinitialiser',
+			'error' => $error,
 			'background' => 'chats',
-            'modalTitle' => 'Réinitialiser le mot de passe',
-            'form' => $form,
-        ]);
+			'modalTitle' => 'Réinitialiser le mot de passe',
+			'form' => $form,
+		]);
 	}
 
 	#[Route('/delete', name: 'delete_user', methods: ['GET', 'POST'])]
-	public function deleteAccount(): Response
+	public function deleteAccount(Request $request, Security $security): Response
 	{
+		if ($request->query->get('confirm') === "true") {
+			/** @var User $user */
+			$user = $this->getUser();
+			$security->logout(false);
+			$this->userService->delete($user);
+			return $this->redirectToRoute("security_login");
+		}
 		return $this->render('shared/alert.html.twig', [
-            'alertTitle' => 'Supprimer le compte',
+			...$this->utils->chats_render($request, $this->getUser()),
+			'alertTitle' => 'Supprimer le compte',
 			'background' => 'chats',
-            'confirmationTitle' => 'Supprimer',
+			'confirmationTitle' => 'Supprimer',
 			'alertContent' => 'Voulez vous vraiment supprimer le compte ?',
-			'submitRoute' => 'confirm_delete_user'
-        ]);
-	}
-
-	#[Route('/confirm_delete', name: 'confirm_delete_user', methods: ['GET', 'POST'])]
-	public function confirmDeleteAccount(Security $security): Response
-	{
-		/** @var User $user */
-		$user = $this->getUser();
-		$security->logout(false);
-		$this->userService->delete($user);
-		return $this->redirectToRoute("security_login");
+			'submitRoute' => 'delete_user'
+		]);
 	}
 }

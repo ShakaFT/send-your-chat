@@ -6,6 +6,7 @@ use App\DTO\Chat\CreateChatDto;
 use App\DTO\Chat\JoinChatDto;
 use App\Entity\Chat;
 use App\Entity\User;
+use App\Utils;
 use App\Form\Chat\CreateChatType;
 use App\Form\Chat\JoinChatType;
 use App\Services\ChatService;
@@ -18,17 +19,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChatController extends AbstractController
 {
     private ChatService $chatService;
+    private Utils $utils;
 
-    public function __construct(ChatService $chatService)
+    public function __construct(ChatService $chatService, Utils $utils)
     {
         $this->chatService = $chatService;
+        $this->utils = $utils;
     }
 
     #[Route('/', name: 'get_chats', methods: ["GET"])]
     public function get_chats(Request $request): Response
     {
         return $this->render('chat/chats.html.twig', [
-            ...chats_render($request, $this->getUser()),
+            ...$this->utils->chats_render($request, $this->getUser()),
         ]);
     }
 
@@ -51,7 +54,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('shared/modal.html.twig', [
-            ...chats_render($request, $this->getUser()),
+            ...$this->utils->chats_render($request, $this->getUser()),
             'confirmationTitle' => 'Rejoindre',
             'error' => $error,
             'form' => $form,
@@ -82,7 +85,7 @@ class ChatController extends AbstractController
         $test = [];
 
         return $this->render('shared/modal.html.twig', [
-            ...chats_render($request, $this->getUser()),
+            ...$this->utils->chats_render($request, $this->getUser()),
             'confirmationTitle' => 'Créer',
             'error' => '',
             'form' => $form,
@@ -113,14 +116,4 @@ class ChatController extends AbstractController
             'controller_name' => 'SettingsChats',
         ]);
     }
-}
-
-function chats_render(Request $request, User $currentUser): array {
-    $chats = $currentUser->getChats();
-    return [
-        'background' => 'chats',
-        'chats' => $chats,
-        'currentChat' => $request->query->get('currentChat') ?? strval($chats->getValues() ? $chats[0]->getId() : 0),
-        'username' => $currentUser->getUsername(),
-    ];
 }
