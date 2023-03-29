@@ -123,8 +123,16 @@ class ServerController extends AbstractController
     #[Route('/member-list', name: 'member_list', methods: ["GET", "POST"])]
     public function member_list(Request $request): Response
     {
-        return $this->render('chat/settings.html.twig', [
-            ...$this->utils->chatsRender($request, $this->getUser()),
+        $currentUser = $this->getUser();
+        $currentChat = $request->query->get('currentChat');
+        $members = $this->serverService->getMembers($currentChat);
+
+        return $this->render('/shared/list.html.twig', [
+            ...$this->utils->chatsRender($request, $currentUser),
+            'modalTitle' => 'Liste des membres',
+            'confirmationTitle' => 'Fermer',
+            // 'pathCanceled' => 'server_settings',
+            'members' => $members,
         ]);
     }
 

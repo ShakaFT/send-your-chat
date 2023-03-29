@@ -11,6 +11,7 @@ use App\Entity\Server;
 use App\Entity\User;
 use App\Repository\ServerRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 
 class ServerService extends AbstractEntityService
 {
@@ -84,5 +85,13 @@ class ServerService extends AbstractEntityService
 	public function getById(int $id) : Server
 	{
 		return $this->repository->findById($id)[0];
+	}
+
+	/**
+     * @return Collection<int, User>
+     */
+	public function getMembers(int $serverId) : Collection
+	{
+		return $this->getById($serverId)->getUsers();
 	}
 }
