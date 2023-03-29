@@ -119,6 +119,7 @@ class ChatController extends AbstractController
             'error' => $error,
             'form' => $form,
             'modalTitle' => 'Rejoindre un serveur',
+            'pathCanceled' => 'get_chats',
         ]);
     }
 
@@ -148,6 +149,7 @@ class ChatController extends AbstractController
             'error' => '',
             'form' => $form,
             'modalTitle' => 'Créer un serveur',
+            'pathCanceled' => 'get_chats',
         ]);
     }
 

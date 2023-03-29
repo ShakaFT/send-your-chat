@@ -6,6 +6,8 @@ use App\DTO\SendMessageDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SendMessageType extends AbstractType
@@ -15,7 +17,12 @@ class SendMessageType extends AbstractType
         $builder
             ->add('message', TextType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Envoyer un message...',
+                    'class' => 'form-control rounded-pill py-3 bg-light border-0 shadow-sm px-4',
+                ],
             ])
         ;
     }

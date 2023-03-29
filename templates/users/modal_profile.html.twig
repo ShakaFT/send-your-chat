@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{% include 'chat/chats.html.twig' %}
+
+	<script type="text/javascript">
+		$(window).on('load', function () {
+$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+});
+	</script>
+
+	<div class="modal" id="modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Mon profil</h5>
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
+				</div>
+				<div class="modal-body d-flex flex-column">
+					<ul>
+						<li><a href="{{ path('edit_user', {'currentChat': currentChat}) }}">Modifier mon profil</a></li>
+						<li><a href="{{ path('reset_password', {'currentChat': currentChat}) }}">Réinitialiser mon mot de passe</a></li>
+						<li><a href="{{ path('delete_user', {'currentChat': currentChat}) }}">Supprimer mon compte</a></li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Retour</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
