@@ -9,12 +9,34 @@
 			display: none; /* for Chrome, Safari, and Opera */
 		}
 		.messages-container {
-			overflow-y: auto;
 			-ms-overflow-style: none; /* for Internet Explorer, Edge */
 			scrollbar-width: none; /* for Firefox */
-			overflow-y: scroll;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		.chats-container {
+			-ms-overflow-style: none; /* for Internet Explorer, Edge */
+			scrollbar-width: none; /* for Firefox */
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		.nav-link {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 100%;
+		}
+		.nav-link:hover {
+			background-color: #0d6efd;
 		}
 	</style>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+$('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
+});
+	</script>
+
 	<div
 		class="container-fluid text-bg-dark">
 		<!-- Start of row -->
@@ -30,22 +52,20 @@
 				<hr>
 
 				<button class="btn btn-outline-primary w-100 mb-2" type="button">
-					Nouvelle discusion
+					Nouvelle discussion
 					<i class="fas fa-plus mx-2"></i>
 				</button>
 
-				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
+				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="chats-container flex-grow-1">
 					<ul class="nav nav-pills flex-column">
 						{% for chat in chats %}
-							<li class="nav-item">
+							<li class="nav-item w-100 p-1">
 								<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
-									<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
 									{{ chat.name }}
 								</a>
 							</li>
 						{% endfor %}
 					</ul>
-
 				</div>
 				<div class="row w-100 m-auto gy-2">
 					<a href="{{ path('create_server', {'currentChat': currentChat}) }}" class="btn btn-primary">Créer un serveur</a>
@@ -81,55 +101,77 @@
 			</div>
 			<!-- End of sidebar -->
 			{% if formMessage is not null and currentChat %}
-				<div class="col-sm-9 d-flex vh-100">
-					<div class="d-flex flex-column w-100 justify-content-between">
-						<div class="p-3 m-3 rounded-3">
-							<div class="row align-items-center mb-2">
-								<div class="col-6">
-									<h4 class="text-white">Chat</h4>
-								</div>
-								<div class="col-6">
-									<a href="{{ path('settings_chat', {'chat': currentChat}) }}">
-										<i class="fas fa-gear fa-lg text-white float-end"></i>
-									</a>
-								</div>
+				<div class="col-sm-9">
+					<div
+						class="p-4 d-flex vh-100 w-100 flex-column">
+						<!-- Start of chat header -->
+						<div class="row align-items-center">
+							<div class="col-6">
+								<h4 class="text-white">Chat</h4>
 							</div>
-							<!-- Start of chat -->
-							<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2" style="max-height: calc(100vh - 240px);">
-								<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
-									{% for message in messages %}
-										<li class="d-flex justify-content-between mb-4">
-											{% if message.getUser().getId() is not same as user.getId() %}
-												<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-											{% endif %}
-											<div class="card w-100 text-bg-light">
-												<div class="card-header d-flex justify-content-between p-3">
-													<p class="fw-bold mb-0">{{ message.getUser().getUsername() }}</p>
-													<p class="text-muted small mb-0">
-														<i class="far fa-clock"></i>
-														{{ message.getTimeSinceNow() }}</p>
-												</div>
-												<div class="card-body">
-													<p class="mb-0">
-														{{ message.getContent() }}
-													</p>
-												</div>
-											</div>
-											{% if message.getUser().getId() is same as user.getId() %}
-												<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
-											{% endif %}
-										</li>
-									{% endfor %}
-								</ul>
+							<div class="col-6">
+								<a href="{{ path('settings_chat', {'chat': currentChat}) }}">
+									<i class="fas fa-gear fa-lg text-white float-end"></i>
+								</a>
 							</div>
-							<!-- End of chat -->
-							{{ form_start(formMessage) }}
-							{{ form_widget(formMessage.message) }}
-							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
-							{{ form_end(formMessage) }}
 						</div>
+						<!-- End of chat header -->
+						<!-- Start of chat -->
+						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2 flex-grow-1" id="messages-container">
+							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
+								{% for message in messages %}
+									<li class="d-flex justify-content-between mb-4">
+										{% if message.getUser().getId() is not same as user.getId() %}
+											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+										{% endif %}
+										<div class="card w-100 text-bg-light">
+											<div class="card-header d-flex justify-content-between p-3">
+												<p class="fw-bold mb-0">{{ message.getUser().getUsername() }}</p>
+												<p class="text-muted small mb-0">
+													<i class="far fa-clock"></i>
+													{{ message.getTimeSinceNow() }}</p>
+											</div>
+											<div class="card-body">
+												<p class="mb-0">
+													{{ message.getContent() }}
+												</p>
+											</div>
+										</div>
+										{% if message.getUser().getId() is same as user.getId() %}
+											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+										{% endif %}
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<!-- End of chat -->
+						<!-- Start of form -->
+						{{ form_start(formMessage) }}
+						<div class="row gx-2 align-items-center">
+							<div class="col">
+								{{ form_row(formMessage.message) }}
+							</div>
+							<div class="col-auto">
+								<button type="submit" class="btn btn-primary rounded-pill">
+									<i class="fas fa-paper-plane"></i>
+								</button>
+							</div>
+						</div>
+						{{ form_end(formMessage) }}
+						<!-- End of form -->
 					</div>
 				</div>
+
+			{% else %}
+
+				<div class="col-9">
+					<div class="alert m-2" role="alert">
+						<h4 class="alert-heading">Bienvenue sur le chat !</h4>
+						<p>Pour commencez à discuter, vous devez rejoindre un serveur ou en créer un.</p>
+						<hr>
+					</div>
+				</div>
+
 			{% endif %}
 		</div>
 		<!-- End of row -->
