@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\AbstractDto;
+use App\DTO\Server\ChangeServerNameDto;
 use App\DTO\Server\CreateServerDto;
 use App\DTO\Server\JoinServerDto;
 use App\Entity\AbstractEntity;
@@ -63,6 +64,21 @@ class ServerService extends AbstractEntityService
 		$server = $this->getById($serverId);
 		$server->setLastInteraction($now->getTimestamp());
 		$this->repository->save($server, true);
+	}
+
+	/**
+	 * @param ChangeServerNameDto $dto
+	 */
+	public function changeName(int $serverId, AbstractDto $dto) {
+		$server = $this->getById($serverId);
+		if ($server->getName() === $dto->serverName) {
+			return 'Le serveur posséde déjà ce nom.';
+		}
+
+		$server->setName($dto->serverName);
+		$this->repository->save($server, true);
+
+		return '';
 	}
 
 	public function getById(int $id) : Server

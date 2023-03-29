@@ -94,22 +94,26 @@ class ServerController extends AbstractController
         $currentUser = $this->getUser();
 
         $dto = new ChangeServerNameDto();
+        $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
+
+        $error = "";
 
         $form = $this->createForm(ChangeServerNameType::class, $dto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //  $server = new Server();
-            //  $server->addUser($this->getUser());
-            //  $error = $this->serverService->add($serverDto, $server);
+            $error = $this->serverService->changeName($currentChat[0], $dto);
 
-            //  if (!$error) return $this->redirectToRoute('get_chats');
+            if (!$error) return $this->redirectToRoute('get_chats', [
+                'currentChat' => $currentChat[0],
+                'typeChat' => $currentChat[1],
+            ]);
         }
 
         return $this->render('shared/modal.html.twig', [
             ...$this->utils->chatsRender($request, $currentUser),
             'confirmationTitle' => 'Modifier',
-            'error' => '',
+            'error' => $error,
             'form' => $form,
             'modalTitle' => 'Modifier le nom du serveur',
             'pathCanceled' => 'server_settings',
@@ -133,10 +137,10 @@ class ServerController extends AbstractController
     }
 
     #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
-    public function delete_server(): Response
+    public function delete_server(Request $request): Response
     {
-        return $this->render('chat/chats.html.twig', [
-            'controller_name' => 'DeleteChats',
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
         ]);
     }
 }

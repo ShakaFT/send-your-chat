@@ -23,7 +23,7 @@ class Utils
         ];
     }
 
-    function getCurrentChat(Request $request, $chats) {
+    function getCurrentChat(Request $request, $chats) : array {
         // [0] -> current chat id
         // [1] -> current chat type
         return [

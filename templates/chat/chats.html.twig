@@ -105,10 +105,11 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 							</div>
 							<div class="col-6">
 								{% if typeChat is same as 'server' %}
-									<a href="{{ path('server_settings', {'currentChat': currentChat}) }}">
+									<a href="{{ path('server_settings', {'currentChat': currentChat, 'typeChat': typeChat}) }}">
 										<i class="fas fa-gear fa-lg text-white float-end"></i>
 									</a>
 								{% endif %}
+
 							</div>
 						</div>
 						<!-- End of chat header -->

@@ -14,18 +14,18 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 			<div class="modal-content">
 				<div class="modal-header">
 					<h6 class="modal-title">Paramétres du serveur</h6>
-					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
+					<a href="{{ path('get_chats', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
 					<div class="d-flex flex-column">
-						<a href="{{ path('update_server_name', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
-						<a href="{{ path('member_list', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
-						<a href="{{ path('update_server_owner', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
-						<a href="{{ path('delete_server', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
+						<a href="{{ path('update_server_name', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
+						<a href="{{ path('member_list', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
+						<a href="{{ path('update_server_owner', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
+						<a href="{{ path('delete_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path('get_chats', {'currentChat': currentChat, 'typeChat': typeChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
 				</div>
 			</div>
 		</div>
