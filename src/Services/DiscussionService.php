@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\DTO\Discussion\CreateDiscussionDto;
 use App\Entity\AbstractEntity;
 use App\Entity\Discussion;
 use App\Entity\User;
 use App\Repository\DiscussionRepository;
 use App\Services\UserService;
 use DateTimeImmutable;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class DiscussionService extends AbstractEntityService
@@ -23,7 +21,6 @@ class DiscussionService extends AbstractEntityService
 	}
 
 	/**
-	 * @param CreateDiscussionDto $dto
 	 * @param Discussion $entity
 	 */
 	public function create(AbstractEntity $entity, User $currentUser, Request $request): Discussion

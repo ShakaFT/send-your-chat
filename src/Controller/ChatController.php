@@ -55,16 +55,25 @@ class ChatController extends AbstractController
             ]);
         }
 
+        $chatName = '';
         $messages = [];
         if ($currentChat[1] === 'discussion') {
-            $messages = $this->discussionService->getById($currentChat[0])->getDiscussionMessages();
+            $discussion = $this->discussionService->getById($currentChat[0]);
+            $username1 = $discussion->getUser1()->getUsername();
+            $username2 = $discussion->getUser2()->getUsername();
+
+            $chatName = $username1 === $user->getUsername() ? $username2 : $username1;
+            $messages = $discussion->getDiscussionMessages();
         } else if ($currentChat[1] === 'server') {
-            $messages = $this->serverService->getById($currentChat[0])->getServerMessages();
+            $server = $this->serverService->getById($currentChat[0]);
+            $chatName = $server->getName();
+            $messages = $server->getServerMessages();
         }
 
         return $this->render('chat/chats.html.twig', [
             ...$this->utils->chatsRender($request, $user, $form),
             'messages' => $messages,
+            'chatName' => $chatName
         ]);
     }
 
