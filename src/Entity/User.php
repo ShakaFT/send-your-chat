@@ -33,7 +33,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->discussions = new ArrayCollection();
         $this->serverMessages = new ArrayCollection();
         $this->discussionMessages = new ArrayCollection();
-        $this->friends = new ArrayCollection();
+        $this->friendsSender = new ArrayCollection();
+        $this->friendsReceiver = new ArrayCollection();
     }
 
 
@@ -49,8 +50,11 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: DiscussionMessage::class)]
     private Collection $discussionMessages;
 
-    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Friends::class)]
-    private Collection $friends;
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Friend::class)]
+    private Collection $friendsSender;
+
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Friend::class)]
+    private Collection $friendsReceiver;
 
     /**
 	 * @param UserDto $dto
@@ -231,32 +235,71 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Friends>
+     * @return Collection<int, Friend>
      */
-    public function getFriends(): Collection
+    public function getFriendsReceiver(): Collection
     {
-        return $this->friends;
+        return $this->friendsReceiver;
     }
 
-    public function addFriend(Friends $friend): self
+    public function addFriendReceiver(Friend $friendReceiver): self
     {
-        if (!$this->friends->contains($friend)) {
-            $this->friends->add($friend);
-            $friend->setUser1($this);
+        if (!$this->friendsReceiver->contains($friendReceiver)) {
+            $this->friendsReceiver->add($friendReceiver);
+            $friendReceiver->setReceiver($this);
         }
 
         return $this;
     }
 
-    public function removeFriend(Friends $friend): self
+    public function removeFriend(Friend $friendReceiver): self
     {
-        if ($this->friends->removeElement($friend)) {
+        if ($this->friendsReceiver->removeElement($friendReceiver)) {
             // set the owning side to null (unless already changed)
-            if ($friend->getUser1() === $this) {
-                $friend->setUser1(null);
+            if ($friendReceiver->getReceiver() === $this) {
+                $friendReceiver->setReceiver(null);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Friend>
+     */
+    public function getFriendsSender(): Collection
+    {
+        return $this->friendsSender;
+    }
+
+    public function addFriendSender(Friend $friendSender): self
+    {
+        if (!$this->friendsSender->contains($friendSender)) {
+            $this->friendsSender->add($friendSender);
+            $friendSender->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFriendSender(Friend $friendSender): self
+    {
+        if ($this->friendsSender->removeElement($friendSender)) {
+            // set the owning side to null (unless already changed)
+            if ($friendSender->getReceiver() === $this) {
+                $friendSender->setReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friend>
+     */
+    public function getFriends() : Collection {
+        return new ArrayCollection(
+            array_merge($this->friendsReceiver->toArray(), $this->friendsSender->toArray())
+        );
     }
 }

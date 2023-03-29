@@ -31,7 +31,12 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 
 				</div>
 				<div class="modal-footer">
+				{% if pathCanceled is defined %}
+					<a href="{{ path( pathCanceled, {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+					{% else %}
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+				{% endif %}
+					
 					<button type="submit" class="btn btn-primary">
 						{{ confirmationTitle }}</button>
 				</div>
