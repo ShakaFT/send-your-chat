@@ -59,7 +59,7 @@
 							<strong>{{ user.getUsername() }}</strong>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-							<li>
+							{# <li>
 								<a class="dropdown-item" href="{{path('edit_user')}}">Profile</a>
 							</li>
 							<li>
@@ -67,6 +67,12 @@
 							</li>
 							<li>
 								<a class="dropdown-item text-danger" href="{{path('delete_user')}}">Supprimer le compte</a>
+							</li> #}
+							<li>
+								<a class="dropdown-item" href="{{ path('profile', {'currentChat': currentChat}) }}">Gérer mon profil</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="" >Voir mes amis</a>
 							</li>
 							<li><hr class="dropdown-divider"></li>
 							<li>

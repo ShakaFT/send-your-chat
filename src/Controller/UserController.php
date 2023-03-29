@@ -86,7 +86,16 @@ class UserController extends AbstractController
 			'form' => $form,
 		]);
 	}
-	#[Route('/reset_password', name: 'reset_password', methods: ['GET', 'POST'])]
+
+	#[Route('/profile', name: 'profile', methods: ['GET', 'POST'])]
+	public function profile(Request $request): Response
+	{
+		return $this->render('users/modal_profile.html.twig', [
+			...$this->utils->chatsRender($request, $this->getUser())
+		]);
+	}
+
+	#[Route('reset-password', name: 'reset_password', methods: ['GET', 'POST'])]
 	public function resetPassword(Request $request): Response
 	{
 		/** @var User $user */
