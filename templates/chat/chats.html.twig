@@ -75,7 +75,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 					<hr>
 					<div class="dropdown mb-2">
 						<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="https://github.com/varlopecar.png" alt="" width="32" height="32" class="rounded-circle me-2">
+							<img src="{{ user.getAvatar() }}" alt="" width="32" height="32" class="rounded-circle me-2" style="background: white">
 							<strong>{{ user.getUsername() }}</strong>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -116,7 +116,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 								{% for message in messages %}
 									<li class="d-flex justify-content-between mb-4">
 										{% if message.getUser().getId() is not same as user.getId() %}
-											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+											<img src="{{ message.getUser().getAvatar() }}" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60" style="background: white;">
 										{% endif %}
 										<div class="card w-100 text-bg-light">
 											<div class="card-header d-flex justify-content-between p-3">
@@ -132,7 +132,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 											</div>
 										</div>
 										{% if message.getUser().getId() is same as user.getId() %}
-											<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+											<img src="{{ user.getAvatar() }}" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60" style="background: white;">
 										{% endif %}
 									</li>
 								{% endfor %}
