@@ -2,19 +2,15 @@
 
 namespace App\Entity;
 
+use App\DTO\Discussion\CreateDiscussionDto;
 use App\Repository\DiscussionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
-class Discussion
+class Discussion extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'discussions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user1 = null;
@@ -26,14 +22,12 @@ class Discussion
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: DiscussionMessage::class)]
     private Collection $discussionMessages;
 
+    #[ORM\Column]
+    private ?float $lastInteraction = null;
+
     public function __construct()
     {
         $this->discussionMessages = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getUser1(): ?User
@@ -58,6 +52,11 @@ class Discussion
         $this->user2 = $user2;
 
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return 'discussion';
     }
 
     /**
@@ -86,6 +85,18 @@ class Discussion
                 $discussionMessage->setDiscussion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastInteraction(): ?float
+    {
+        return $this->lastInteraction;
+    }
+
+    public function setLastInteraction(float $lastInteraction): self
+    {
+        $this->lastInteraction = $lastInteraction;
 
         return $this;
     }

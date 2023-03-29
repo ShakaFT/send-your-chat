@@ -29,19 +29,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(length: 255)]
     private ?string $avatar = null;
 
-    public function __construct()
-    {
-        $this->servers = new ArrayCollection();
-        $this->roles = 'ROLE_USER';
-        $this->avatar = '';
-        $this->discussions = new ArrayCollection();
-        $this->serverMessages = new ArrayCollection();
-        $this->discussionMessages = new ArrayCollection();
-        $this->friendsSender = new ArrayCollection();
-        $this->friendsReceiver = new ArrayCollection();
-    }
-
-
     #[ORM\ManyToMany(targetEntity: Server::class, mappedBy: 'users')]
     private Collection $servers;
 
@@ -59,6 +46,18 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Friend::class)]
     private Collection $friendsReceiver;
+
+    public function __construct()
+    {
+        $this->servers = new ArrayCollection();
+        $this->roles = 'ROLE_USER';
+        $this->avatar = '';
+        $this->discussions = new ArrayCollection();
+        $this->serverMessages = new ArrayCollection();
+        $this->discussionMessages = new ArrayCollection();
+        $this->friendsSender = new ArrayCollection();
+        $this->friendsReceiver = new ArrayCollection();
+    }
 
     /**
 	 * @param UserDto $dto
@@ -120,11 +119,13 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Server>
+     * @return array<int, Server>
      */
-    public function getChats(): Collection
+    public function getChats(): array
     {
-        return $this->servers;
+        $chats = [...$this->servers, ...$this->discussions];
+        if ($chats) usort($chats, function($a, $b) {return strcmp($b->getLastInteraction(), $a->getLastInteraction());});
+        return $chats;
     }
 
     public function addServer(Server $server): self

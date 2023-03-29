@@ -9,6 +9,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\Server;
 use App\Entity\User;
 use App\Repository\ServerRepository;
+use DateTimeImmutable;
 
 class ServerService extends AbstractEntityService
 {
@@ -24,6 +25,8 @@ class ServerService extends AbstractEntityService
 	 */
 	public function add(AbstractDto $dto, AbstractEntity $entity): string
 	{
+		$now = new DateTimeImmutable();
+		$entity->setLastInteraction($now->getTimestamp());
 		$entity->setFromCreateDto($dto);
 		return parent::add($dto, $entity);
 	}
@@ -52,6 +55,14 @@ class ServerService extends AbstractEntityService
 		$this->repository->save($server, true);
 
 		return $error;
+	}
+
+	public function refreshLastInteraction(int $serverId) {
+		$now = new DateTimeImmutable();
+
+		$server = $this->getById($serverId);
+		$server->setLastInteraction($now->getTimestamp());
+		$this->repository->save($server, true);
 	}
 
 	public function getById(int $id) : Server

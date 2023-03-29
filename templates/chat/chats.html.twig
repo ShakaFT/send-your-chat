@@ -51,25 +51,25 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 
 				<hr>
 
-				<button class="btn btn-outline-primary w-100 mb-2" type="button">
+				<a class="btn btn-outline-primary w-100 mb-2" type="button" href="{{ path('get_friends', {'currentChat': currentChat, 'typeChat': typeChat}) }}">
 					Nouvelle discussion
 					<i class="fas fa-plus mx-2"></i>
-				</button>
+				</a>
 
 				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="chats-container flex-grow-1">
 					<ul class="nav nav-pills flex-column">
 						{% for chat in chats %}
 							<li class="nav-item w-100 p-1">
-								<a href="{{ path('get_chats', {'currentChat': chat.getId()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
-									{{ chat.name }}
+								<a href="{{ path('get_chats', {'currentChat': chat.getId(), 'typeChat': chat.getType()}) }}" class="nav-link {{currentChat is same as chat.getId()|trans ? 'active' : 'text-white'}}" aria-current="page">
+									{{ chat.getType() is same as 'server' ? chat.name : (chat.getUser1().getUsername() is same as user.getUsername() ? chat.getUser2().getUsername() : chat.getUser1().getUsername()) }}
 								</a>
 							</li>
 						{% endfor %}
 					</ul>
 				</div>
 				<div class="row w-100 m-auto gy-2">
-					<a href="{{ path('create_server', {'currentChat': currentChat}) }}" class="btn btn-primary">Créer un serveur</a>
-					<a href="{{ path('join_server', {'currentChat': currentChat}) }}" class="btn btn-outline-primary">Rejoindre un serveur</a>
+					<a href="{{ path('create_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-primary">Créer un serveur</a>
+					<a href="{{ path('join_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary">Rejoindre un serveur</a>
 				</div>
 				<div>
 					<hr>
@@ -80,10 +80,10 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
 							<li>
-								<a class="dropdown-item" href="{{ path('profile', {'currentChat': currentChat}) }}">Gérer mon profil</a>
+								<a class="dropdown-item" href="{{ path('profile', {'currentChat': currentChat, 'typeChat': typeChat}) }}">Gérer mon profil</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="{{ path('get_friends', {'currentChat': currentChat}) }}">Voir mes amis</a>
+								<a class="dropdown-item" href="{{ path('get_friends', {'currentChat': currentChat, 'typeChat': typeChat}) }}">Voir mes amis</a>
 							</li>
 							<li><hr class="dropdown-divider"></li>
 							<li>
