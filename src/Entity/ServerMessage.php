@@ -80,7 +80,7 @@ class ServerMessage extends AbstractEntity
         }
 
         if ($messageTimestampSinceNow > $timestampSinceNow) {
-            return date('Y-m-d H:i', $messageTimestampSinceNow);
+            return date('d-m-Y H:i', $this->timestamp);
         }
 
         if ($messageTimestampSinceNow < 3600) {

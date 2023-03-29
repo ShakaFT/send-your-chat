@@ -66,6 +66,9 @@
 								<a class="dropdown-item" href="{{path('reset_password')}}">Réinitialiser le mot de passe</a>
 							</li>
 							<li>
+								<a class="dropdown-item" href="{{path('get_friends', {'currentChat': currentChat}) }}">Voir mes amis</a>
+							</li>
+							<li>
 								<a class="dropdown-item text-danger" href="{{path('delete_user')}}">Supprimer le compte</a>
 							</li>
 							<li><hr class="dropdown-divider"></li>
