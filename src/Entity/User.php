@@ -26,10 +26,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(length: 255)]
     private ?string $roles = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $avatar = null;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
         $this->roles = 'ROLE_USER';
+        $this->avatar = '';
         $this->discussions = new ArrayCollection();
         $this->serverMessages = new ArrayCollection();
         $this->discussionMessages = new ArrayCollection();
@@ -99,6 +103,18 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

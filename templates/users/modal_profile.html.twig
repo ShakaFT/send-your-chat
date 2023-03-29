@@ -17,11 +17,17 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
-					<ul>
+					{# <ul>
 						<li><a href="{{ path('edit_user', {'currentChat': currentChat}) }}">Modifier mon profil</a></li>
 						<li><a href="{{ path('reset_password', {'currentChat': currentChat}) }}">Réinitialiser mon mot de passe</a></li>
 						<li><a href="{{ path('delete_user', {'currentChat': currentChat}) }}">Supprimer mon compte</a></li>
-					</ul>
+					</ul> #}
+
+					<div class="d-flex flex-column">
+						<a href="{{ path('edit_user', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Modifier mon profil</a>
+						<a href="{{ path('reset_password', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Réinitialiser mon mot de passe</a>
+						<a href="{{ path('delete_user', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Supprimer mon compte</a>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Retour</a>
