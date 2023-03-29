@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\DTO\SendMessageDto;
+use App\DTO\Server\ChangeServerNameDto;
 use App\DTO\Server\CreateServerDto;
 use App\DTO\Server\JoinServerDto;
 use App\Entity\Server;
 use App\Entity\ServerMessage;
 use App\Entity\User;
 use App\Form\SendMessageType;
+use App\Form\Server\ChangeServerNameType;
 use App\Services\ServerMessageService;
 use App\Utils;
 use App\Form\Server\CreateServerType;
@@ -49,7 +51,7 @@ class ChatController extends AbstractController
                 'currentChat' => $currentChat,
                 'message' => $sendMessageDto->message,
             ]);
-        }    
+        }
 
         return $this->render('chat/chats.html.twig', [
             ...$this->utils->chatsRender($request, $user, $form),
@@ -117,7 +119,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chatsRender($request, $this->getUser()),
+            ...$this->utils->chatsRender($request, $currentUser),
             'confirmationTitle' => 'Créer',
             'error' => '',
             'form' => $form,
@@ -126,28 +128,64 @@ class ChatController extends AbstractController
         ]);
     }
 
-
-    // #[Route('/server/update', name: 'update_server', methods: ["GET", "POST"])]
-    // public function update_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'UpdateChats',
-    //     ]);
-    // }
-
-    // #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
-    // public function delete_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'DeleteChats',
-    //     ]);
-    // }
-
-    #[Route('/settings', name: 'settings_chat', methods: ["GET", "POST"])]
-    public function settings_chat(): Response
+    #[Route('/server/settings', name: 'server_settings', methods: ["GET", "POST"])]
+    public function server_settings(Request $request): Response
     {
         return $this->render('chat/settings.html.twig', [
-            'controller_name' => 'SettingsChat',
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
+
+    #[Route('/server/update/name', name: 'update_server_name', methods: ["GET", "POST"])]
+    public function update_server_name(Request $request): Response
+    {
+         /** @var User $currentUser */
+         $currentUser = $this->getUser();
+ 
+         $dto = new ChangeServerNameDto();
+ 
+         $form = $this->createForm(ChangeServerNameType::class, $dto);
+         $form->handleRequest($request);
+ 
+         if ($form->isSubmitted() && $form->isValid()) {
+            //  $server = new Server();
+            //  $server->addUser($this->getUser());
+            //  $error = $this->serverService->add($serverDto, $server);
+ 
+            //  if (!$error) return $this->redirectToRoute('get_chats');
+         }
+ 
+         return $this->render('shared/modal.html.twig', [
+             ...$this->utils->chatsRender($request, $currentUser),
+             'confirmationTitle' => 'Modifier',
+             'error' => '',
+             'form' => $form,
+             'modalTitle' => 'Modifier le nom du serveur',
+             'pathCanceled' => 'server_settings',
+         ]);
+    }
+
+    #[Route('/server/member-list', name: 'member_list', methods: ["GET", "POST"])]
+    public function member_list(Request $request): Response
+    {
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
+
+    #[Route('/server/update/owner', name: 'update_owner', methods: ["GET", "POST"])]
+    public function change_owner(Request $request): Response
+    {
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
+
+    #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
+    public function delete_server(): Response
+    {
+        return $this->render('chat/chats.html.twig', [
+            'controller_name' => 'DeleteChats',
         ]);
     }
 }

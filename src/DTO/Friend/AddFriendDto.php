@@ -16,8 +16,5 @@ class AddFriendDto extends AbstractDto
     /**
      * @param Friend $friend
      */
-    public function setFromEntity(AbstractEntity $friend): void
-    {
-        $this->username = $friend->getReceiver()->getUsername();
-    }
+    public function setFromEntity(AbstractEntity $friend): void {}
 }

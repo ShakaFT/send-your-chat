@@ -1,7 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Settings{% endblock %}
-
 {% block body %}
+	{% include 'chat/chats.html.twig' %}
 
+	<script type="text/javascript">
+		$(window).on('load', function () {
+$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+});
+	</script>
+
+	<div class="modal" id="modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title">Paramétres du serveur</h6>
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
+				</div>
+				<div class="modal-body d-flex flex-column">
+					<div class="d-flex flex-column">
+						<a href="{{ path('update_server_name', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
+						<a href="{{ path('member_list', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
+						<a href="{{ path('update_owner', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
+						<a href="{{ path('delete_server', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
