@@ -13,23 +13,37 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 		<div class="modal-dialog modal-dialog-centered modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
-						<h6 class="modal-title">Mes amis</h6>
+					<h6 class="modal-title">Mes amis</h6>
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
 					<ul>
 						{% for friend in friends %}
-							{% if friend.getReceiver() is same as user %}
-								<li>{{ friend.getSender().getUsername() }}</li>
-							{% else %}
-								<li>{{ friend.getReceiver().getUsername() }}</li>
-							{% endif %}
+							<li>
+								{% if friend.getReceiver() is same as user %}
+									{{ friend.getSender().getUsername() }}
+									<a href="" type="button" class="btn btn-primary">
+										<i class="fa-solid fa-message"></i>
+									</a>
+									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'friend': friend.getSender().getUsername()}) }}" type="button" class="btn btn-danger">
+										<i class="fa-solid fa-trash"></i>
+									</a>
+								{% else %}
+									{{ friend.getReceiver().getUsername() }}
+									<a href="" type="button" class="btn btn-primary">
+										<i class="fa-solid fa-message"></i>
+									</a>
+									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'friend': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-danger">
+										<i class="fa-solid fa-trash"></i>
+									</a>
+								{% endif %}
+							</li>
 						{% endfor %}
 					</ul>
 				</div>
 				<div class="modal-footer">
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
-					<a href="{{ path('add_friend', {'currentChat': currentChat, 'confirm': 'true'}) }}" type="button" class="btn btn-primary">Ajouter un ami</a>
+					<a href="{{ path('add_friend', {'currentChat': currentChat}) }}" type="button" class="btn btn-primary">Ajouter un ami</a>
 				</div>
 			</div>
 		</div>

@@ -14,12 +14,10 @@ class FriendService extends AbstractEntityService
 {
 
     private UserRepository $userRepository;
-    private FriendRepository $friendRepository;
     public function __construct(FriendRepository $friendRepository, UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->friendRepository = $friendRepository;
-        //parent::__construct($friendRepository);
+		parent::__construct($friendRepository);
     }
 
     /**
@@ -42,7 +40,7 @@ class FriendService extends AbstractEntityService
         }
 
         foreach ($currentUser->getFriends() as $friend) {
-            if($friend->getReceiver()->getUsername() === $dto->username || $friend->getSender()->getUsername() === $dto->username) {
+            if ($friend->getReceiver()->getUsername() === $dto->username || $friend->getSender()->getUsername() === $dto->username) {
                 return "Vous êtes déjà ami avec cet utilisateur.";
             }
         }
@@ -50,7 +48,16 @@ class FriendService extends AbstractEntityService
         $entity->setSender($currentUser);
         $entity->setReceiver($user);
 
-        $this->friendRepository->save($entity, true);
+        $this->repository->save($entity, true);
         return '';
+    }
+
+    public function getByUsername(string $friendName, User $currentUser)
+    {
+        foreach ($currentUser->getFriends() as $friend) {
+            if ($friend->getReceiver()->getUsername() === $friendName || $friend->getSender()->getUsername() === $friendName) {
+                return $friend;
+            }
+        }
     }
 }

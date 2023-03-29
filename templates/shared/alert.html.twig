@@ -16,14 +16,14 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">{{ alertTitle }}</h5>
-					<a href="{{ path('profile', {'currentChat': currentChat}) }}" class="btn-close"></a>
+					<a href="{{ path(pathCanceled, {'currentChat': currentChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
 					<b class="text-danger">{{alertContent}}</b>
 				</div>
 				<div class="modal-footer">
-					<a href="{{ path('profile', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
-					<a href="{{ path(submitRoute, {'confirm': 'true'}) }}" type="button" class="btn btn-danger">{{ confirmationTitle }}</a>
+					<a href="{{ path(pathCanceled, {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path(submitRoute, submitParams) }}" type="button" class="btn btn-danger">{{ confirmationTitle }}</a>
 				</div>
 			</div>
 		</div>

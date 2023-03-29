@@ -140,7 +140,11 @@ class UserController extends AbstractController
 			'background' => 'chats',
 			'confirmationTitle' => 'Supprimer',
 			'alertContent' => 'Voulez vous vraiment supprimer le compte ?',
-			'submitRoute' => 'delete_user'
+			'submitRoute' => 'delete_user',
+			'pathCanceled' =>'profile',
+			'submitParams' => [
+				'confirm' => 'true'
+			]
 		]);
 	}
 }
