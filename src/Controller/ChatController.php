@@ -3,20 +3,16 @@
 namespace App\Controller;
 
 use App\DTO\SendMessageDto;
-use App\DTO\Server\CreateServerDto;
-use App\DTO\Server\JoinServerDto;
 use App\Entity\DiscussionMessage;
-use App\Entity\Server;
 use App\Entity\ServerMessage;
 use App\Entity\User;
 use App\Form\SendMessageType;
 use App\Services\DiscussionMessageService;
 use App\Services\ServerMessageService;
 use App\Utils;
-use App\Form\Server\CreateServerType;
-use App\Form\Server\JoinServerType;
 use App\Services\DiscussionService;
 use App\Services\ServerService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +56,7 @@ class ChatController extends AbstractController
         }
 
         $messages = [];
-        if (!$currentChat[1] === 'discussion') {
+        if ($currentChat[1] === 'discussion') {
             $messages = $this->discussionService->getById($currentChat[0])->getDiscussionMessages();
         } else if ($currentChat[1] === 'server') {
             $messages = $this->serverService->getById($currentChat[0])->getServerMessages();
@@ -98,77 +94,6 @@ class ChatController extends AbstractController
             'typeChat' => $typeChat
         ]);
     }
-
-    #[Route('/server/join', name: 'join_server', methods: ["GET", "POST"])]
-    public function join_server(Request $request): Response
-    {
-        $serverDto = new JoinServerDto();
-        $error = "";
-
-        $form = $this->createForm(JoinServerType::class, $serverDto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $error = $this->serverService->join($serverDto, $this->getUser());
-            if (!$error) return $this->redirectToRoute('get_chats');
-        }
-
-        return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chatsRender($request, $this->getUser()),
-            'confirmationTitle' => 'Rejoindre',
-            'error' => $error,
-            'form' => $form,
-            'modalTitle' => 'Rejoindre un serveur',
-            'pathCanceled' => 'get_chats',
-        ]);
-    }
-
-    #[Route('/server/create', name: 'create_server', methods: ["GET", "POST"])]
-    public function create_server(Request $request): Response
-    {
-        /** @var User $currentUser */
-        $currentUser = $this->getUser();
-        $chats = $currentUser->getChats();
-
-        $serverDto = new CreateServerDto();
-
-        $form = $this->createForm(CreateServerType::class, $serverDto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $server = new Server();
-            $server->addUser($this->getUser());
-            $error = $this->serverService->add($serverDto, $server);
-
-            if (!$error) return $this->redirectToRoute('get_chats');
-        }
-
-        return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chatsRender($request, $this->getUser()),
-            'confirmationTitle' => 'Créer',
-            'error' => '',
-            'form' => $form,
-            'modalTitle' => 'Créer un serveur',
-            'pathCanceled' => 'get_chats',
-        ]);
-    }
-
-
-    // #[Route('/server/update', name: 'update_server', methods: ["GET", "POST"])]
-    // public function update_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'UpdateChats',
-    //     ]);
-    // }
-
-    // #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
-    // public function delete_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'DeleteChats',
-    //     ]);
-    // }
 
     #[Route('/settings', name: 'settings_chat', methods: ["GET", "POST"])]
     public function settings_chat(): Response

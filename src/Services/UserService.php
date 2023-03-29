@@ -20,6 +20,10 @@ class UserService extends AbstractEntityService {
 		$this->passwordHasher = $passwordHasher;
 	}
 
+	public function getByUsername(string $username): User {
+		return $this->repository->findByUsername($username)[0];
+	}
+
 	/**
 	 * @param UserDto $dto
 	 * @param User $entity

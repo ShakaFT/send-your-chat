@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Discussion\CreateDiscussionDto;
 use App\Repository\DiscussionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

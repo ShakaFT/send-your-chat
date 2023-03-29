@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DiscussionMessageRepository;
+use App\Utils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -62,6 +63,12 @@ class DiscussionMessage extends AbstractEntity
     public function getTimestamp(): ?float
     {
         return $this->timestamp;
+    }
+
+    public function getTimeSinceNow(): string
+    {
+        $utils = new Utils();
+        return $utils->getTimeSinceNow($this->timestamp);
     }
 
     public function setTimestamp(float $timestamp): self
