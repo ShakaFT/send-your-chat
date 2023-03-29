@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,7 +34,10 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private Collection $servers;
 
     #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Discussion::class)]
-    private Collection $discussions;
+    private Collection $discussions1;
+
+    #[ORM\OneToMany(mappedBy: 'user2', targetEntity: Discussion::class)]
+    private Collection $discussions2;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: ServerMessage::class)]
     private Collection $serverMessages;
@@ -52,7 +56,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->servers = new ArrayCollection();
         $this->roles = 'ROLE_USER';
         $this->avatar = '';
-        $this->discussions = new ArrayCollection();
+        $this->discussions1 = new ArrayCollection();
+        $this->discussions2 = new ArrayCollection();
         $this->serverMessages = new ArrayCollection();
         $this->discussionMessages = new ArrayCollection();
         $this->friendsSender = new ArrayCollection();
@@ -123,7 +128,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     public function getChats(): array
     {
-        $chats = [...$this->servers, ...$this->discussions];
+        $chats = [...$this->servers, ...$this->getDiscussions()];
         if ($chats) usort($chats, function($a, $b) {return strcmp($b->getLastInteraction(), $a->getLastInteraction());});
         return $chats;
     }
@@ -162,34 +167,34 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Discussion>
+     * @return array<int, Discussion>
      */
-    public function getDiscussions(): Collection
+    public function getDiscussions(): array
     {
-        return $this->discussions;
+        return [...$this->discussions1, ...$this->discussions2];
     }
 
-    public function addDiscussion(Discussion $discussion): self
-    {
-        if (!$this->discussions->contains($discussion)) {
-            $this->discussions->add($discussion);
-            $discussion->setUser1($this);
-        }
+    // public function addDiscussion(Discussion $discussion): self
+    // {
+    //     if (!$this->discussions->contains($discussion)) {
+    //         $this->discussions->add($discussion);
+    //         $discussion->setUser1($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeDiscussion(Discussion $discussion): self
-    {
-        if ($this->discussions->removeElement($discussion)) {
-            // set the owning side to null (unless already changed)
-            if ($discussion->getUser1() === $this) {
-                $discussion->setUser1(null);
-            }
-        }
+    // public function removeDiscussion(Discussion $discussion): self
+    // {
+    //     if ($this->discussions->removeElement($discussion)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($discussion->getUser1() === $this) {
+    //             $discussion->setUser1(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, ServerMessage>
