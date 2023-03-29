@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Send your chat - Profil
+{% endblock %}
+
 {% block body %}
 	{% include 'chat/chats.html.twig' %}
 
@@ -19,8 +22,8 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 				<div class="modal-body d-flex flex-column">
 					<div class="d-flex flex-column">
 						<a href="{{ path('edit_user', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Modifier mon profil</a>
-						<a href="{{ path('reset_password', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Réinitialiser mon mot de passe</a>
-						<a href="{{ path('delete_user', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Supprimer mon compte</a>
+						<a href="{{ path('reset_password', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-warning mt-2">Réinitialiser mon mot de passe</a>
+						<a href="{{ path('delete_user', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Supprimer mon compte</a>
 					</div>
 				</div>
 				<div class="modal-footer">
