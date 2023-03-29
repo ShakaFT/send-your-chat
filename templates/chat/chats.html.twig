@@ -51,7 +51,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 
 				<hr>
 
-				<a class="btn btn-outline-primary w-100 mb-2" type="button" href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat}) }}">
+				<a class="btn btn-outline-primary w-100 mb-2" type="button" href="{{ path('get_friends', {'currentChat': currentChat, 'typeChat': typeChat}) }}">
 					Nouvelle discussion
 					<i class="fas fa-plus mx-2"></i>
 				</a>

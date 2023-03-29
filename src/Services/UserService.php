@@ -32,7 +32,7 @@ class UserService extends AbstractEntityService {
 		$userWithSameEmail = $this->repository->findByEmail($dto->email);
 		$userWithSameUsername = $this->repository->findByUsername($dto->username);
 		// set avatar to random image bases on username
-		$entity->setAvatar('https://avatars.dicebear.com/api/avataaars/' . $dto->username . '.svg');
+		$entity->setAvatar('https://ui-avatars.com/api/?name=' . $dto->username);
 
 		if ($userWithSameEmail) {
 			return 'Il y a déjà un utilisateur avec cette adresse mail';

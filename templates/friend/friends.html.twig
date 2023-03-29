@@ -22,18 +22,18 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 							<li>
 								{% if friend.getReceiver() is same as user %}
 									{{ friend.getSender().getUsername() }}
-									<a href="" type="button" class="btn btn-primary">
+									<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getSender().getUsername()}) }}" type="button" class="btn btn-primary">
 										<i class="fa-solid fa-message"></i>
 									</a>
-									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'friend': friend.getSender().getUsername()}) }}" type="button" class="btn btn-danger">
+									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getSender().getUsername()}) }}" type="button" class="btn btn-danger">
 										<i class="fa-solid fa-trash"></i>
 									</a>
 								{% else %}
 									{{ friend.getReceiver().getUsername() }}
-									<a href="" type="button" class="btn btn-primary">
+									<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-primary">
 										<i class="fa-solid fa-message"></i>
 									</a>
-									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'friend': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-danger">
+									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-danger">
 										<i class="fa-solid fa-trash"></i>
 									</a>
 								{% endif %}

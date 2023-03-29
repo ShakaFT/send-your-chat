@@ -27,25 +27,10 @@ class DiscussionController extends AbstractController
     #[Route('/create', name: 'create_discussion', methods: ["GET", "POST"])]
     public function create_discussion(Request $request): Response
     {
-        $error = "";
-        $discussionDto = new CreateDiscussionDto();
-
-        $form = $this->createForm(CreateDiscussionType::class, $discussionDto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $discussion = new Discussion();
-            $error = $this->discussionService->create($discussionDto, $discussion, $this->getUser());
-            if (!$error) return $this->redirectToRoute('get_chats');
-        }
-
-        return $this->render('shared/modal.html.twig', [
-            ...$this->utils->chatsRender($request, $this->getUser()),
-            'confirmationTitle' => 'Créer',
-            'error' => $error,
-            'form' => $form,
-            'modalTitle' => 'Créer une nouvelle discussion avec un ami',
-            'pathCanceled' => 'get_chats',
+        $discussion = $this->discussionService->create(new Discussion(), $this->getUser(), $request);
+        return $this->redirectToRoute('get_chats', [
+            'currentChat' => $discussion->getId(),
+            'typeChat' => 'discussion',
         ]);
     }
 }
