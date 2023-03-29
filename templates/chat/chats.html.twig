@@ -14,6 +14,12 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
+		.chats-container {
+			-ms-overflow-style: none; /* for Internet Explorer, Edge */
+			scrollbar-width: none; /* for Firefox */
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
 		.nav-link {
 			white-space: nowrap;
 			overflow: hidden;
@@ -24,6 +30,13 @@
 			background-color: #0d6efd;
 		}
 	</style>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+$('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
+});
+	</script>
+
 	<div
 		class="container-fluid text-bg-dark">
 		<!-- Start of row -->
@@ -43,7 +56,7 @@
 					<i class="fas fa-plus mx-2"></i>
 				</button>
 
-				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container flex-grow-1">
+				<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="chats-container flex-grow-1">
 					<ul class="nav nav-pills flex-column">
 						{% for chat in chats %}
 							<li class="nav-item w-100 p-1">
@@ -101,7 +114,7 @@
 						</div>
 						<!-- End of chat header -->
 						<!-- Start of chat -->
-						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2 flex-grow-1">
+						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2 flex-grow-1" id="messages-container">
 							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
 								{% for message in messages %}
 									<li class="d-flex justify-content-between mb-4">
@@ -130,25 +143,32 @@
 						</div>
 						<!-- End of chat -->
 						<!-- Start of form -->
-						<div class="row">
-							{{ form_start(formMessage) }}
-							{{ form_widget(formMessage.message) }}
-							<button type="submit" class="btn btn-primary">Envoyer</button>
-							{{ form_end(formMessage) }}
-						</div>
-						{# <div
-							class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2 w-100">
-							<!-- Style form -->
-							{{ form_start(formMessage) }}
-							<div class="col-12">
-								{{ form_row(formMessage.message, {'attr': {'class': 'form-control form-control-lg'}}) }}
-								<i class="fas fa-paper-plane fa-lg text-black float-end"></i>
+						{{ form_start(formMessage) }}
+						<div class="row gx-2 align-items-center">
+							<div class="col">
+								{{ form_row(formMessage.message) }}
 							</div>
-							{{ form_end(formMessage) }}
-						</div> #}
+							<div class="col-auto">
+								<button type="submit" class="btn btn-primary rounded-pill">
+									<i class="fas fa-paper-plane"></i>
+								</button>
+							</div>
+						</div>
+						{{ form_end(formMessage) }}
 						<!-- End of form -->
 					</div>
 				</div>
+
+			{% else %}
+
+				<div class="col-9">
+					<div class="alert m-2" role="alert">
+						<h4 class="alert-heading">Bienvenue sur le chat !</h4>
+						<p>Pour commencez à discuter, vous devez rejoindre un serveur ou en créer un.</p>
+						<hr>
+					</div>
+				</div>
+
 			{% endif %}
 		</div>
 		<!-- End of row -->
