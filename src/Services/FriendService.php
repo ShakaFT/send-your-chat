@@ -8,35 +8,49 @@ use App\Entity\AbstractEntity;
 use App\Entity\Friend;
 use App\Entity\User;
 use App\Repository\FriendRepository;
+use App\Repository\UserRepository;
 
 class FriendService extends AbstractEntityService
 {
 
-    public function __construct(FriendRepository $friendRepository)
+    private UserRepository $userRepository;
+    private FriendRepository $friendRepository;
+    public function __construct(FriendRepository $friendRepository, UserRepository $userRepository)
     {
-        parent::__construct($friendRepository);
+        $this->userRepository = $userRepository;
+        $this->friendRepository = $friendRepository;
+        //parent::__construct($friendRepository);
     }
 
     /**
      * @param AddFriendDto $dto
      * @param Friend $entity
      */
-    public function add(AbstractDto $dto, AbstractEntity $entity): string
+    public function addFriend(AbstractDto $dto, AbstractEntity $entity, User $currentUser): string
     {
         $error = "";
 
         /** @var User $user */
         try {
-            $user = $this->repository->findByUsername($dto->username)[0];
+            $user = $this->userRepository->findByUsername($dto->username)[0];
         } catch (\Exception) {
             return "L'utilisateur n'existe pas.";
         }
 
-        // if ($user->getFriends()->contains($entity->getFriend())) {
-        //     return "Vous êtes déjà amis avec cet utilisateur.";
-        // }
+        if ($dto->username === $currentUser->getUsername()) {
+            return "Vous ne pouvez pas être ami avec vous même.";
+        }
 
-        // $entity->setFriend($user);
-        return parent::add($dto, $entity);
+        foreach ($currentUser->getFriends() as $friend) {
+            if($friend->getReceiver()->getUsername() === $dto->username || $friend->getSender()->getUsername() === $dto->username) {
+                return "Vous êtes déjà ami avec cet utilisateur.";
+            }
+        }
+
+        $entity->setSender($currentUser);
+        $entity->setReceiver($user);
+
+        $this->friendRepository->save($entity, true);
+        return '';
     }
 }

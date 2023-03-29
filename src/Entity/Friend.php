@@ -9,34 +9,38 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FriendRepository::class)]
 class Friend extends AbstractEntity
 {
-    #[ORM\ManyToOne(inversedBy: 'friend')]
+    #[ORM\ManyToOne(inversedBy: 'friendsSender')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user1 = null;
+    private ?User $sender = null;
 
-    #[ORM\ManyToOne(inversedBy: 'friend')]
+    #[ORM\ManyToOne(inversedBy: 'friendsReceiver')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user2 = null;
+    private ?User $receiver = null;
 
-    public function getUser1(): ?User
+    /**
+     * @param AddFriendDto $dto
+     */
+
+    public function getSender(): ?User
     {
-        return $this->user1;
+        return $this->sender;
     }
 
-    public function setUser1(?User $user1): self
+    public function setSender(?User $sender): self
     {
-        $this->user1 = $user1;
+        $this->sender = $sender;
 
         return $this;
     }
 
-    public function getUser2(): ?User
+    public function getReceiver(): ?User
     {
-        return $this->user2;
+        return $this->receiver;
     }
 
-    public function setUser2(?User $user2): self
+    public function setReceiver(?User $receiver): self
     {
-        $this->user2 = $user2;
+        $this->receiver = $receiver;
 
         return $this;
     }

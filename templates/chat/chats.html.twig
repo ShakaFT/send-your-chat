@@ -66,6 +66,9 @@
 								<a class="dropdown-item" href="{{path('reset_password')}}">Réinitialiser le mot de passe</a>
 							</li>
 							<li>
+								<a class="dropdown-item" href="{{path('get_friends', {'currentChat': currentChat}) }}">Voir mes amis</a>
+							</li>
+							<li>
 								<a class="dropdown-item text-danger" href="{{path('delete_user')}}">Supprimer le compte</a>
 							</li>
 							<li><hr class="dropdown-divider"></li>
@@ -119,12 +122,6 @@
 							{{ form_widget(formMessage.message) }}
 							<button type="submit" class="btn btn-primary mt-2">Envoyer</button>
 							{{ form_end(formMessage) }}
-							{# <form class="flex-shrink-0 mb-2 position-sticky bottom-0">
-																					<div class="form-group">
-																						<textarea class="form-control" rows="3" placeholder="Écrire un message..."></textarea>
-																					</div>
-																					<button type="submit" href="{{  }}" class="btn btn-primary mt-2">Envoyer</button>
-																				</form> #}
 						</div>
 					</div>
 				</div>

@@ -1,7 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes amis{% endblock %}
-
 {% block body %}
+	{% include 'chat/chats.html.twig' %}
 
+	<script type="text/javascript">
+		$(window).on('load', function () {
+$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+});
+	</script>
+
+	<div class="modal" id="modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+						<h6 class="modal-title">Mes amis</h6>
+					<a href="{{ path('get_chats') }}" class="btn-close"></a>
+				</div>
+				<div class="modal-body d-flex flex-column">
+					<ul>
+						{% for friend in friends %}
+							{% if friend.getReceiver() is same as user %}
+								<li>{{ friend.getSender().getUsername() }}</li>
+							{% else %}
+								<li>{{ friend.getReceiver().getUsername() }}</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
+					<a href="{{ path('add_friend', {'confirm': 'true'}) }}" type="button" class="btn btn-primary">Ajouter un ami</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
