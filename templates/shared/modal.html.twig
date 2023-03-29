@@ -17,7 +17,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 				{{ form_start(form) }}
 				<div class="modal-header">
 					<h5 class="modal-title">{{ modalTitle }}</h5>
-					<a href="{{ path('get_chats') }}" class="btn-close"></a>
+					<a href="{{ path(pathCanceled, {'currentChat': currentChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
 
@@ -31,14 +31,8 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 
 				</div>
 				<div class="modal-footer">
-				{% if pathCanceled is defined %}
 					<a href="{{ path( pathCanceled, {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
-					{% else %}
-					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
-				{% endif %}
-					
-					<button type="submit" class="btn btn-primary">
-						{{ confirmationTitle }}</button>
+					<button type="submit" class="btn btn-primary">{{ confirmationTitle }}</button>
 				</div>
 				{{ form_end(form) }}
 			</div>

@@ -14,7 +14,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 			<div class="modal-content">
 				<div class="modal-header">
 						<h6 class="modal-title">Mes amis</h6>
-					<a href="{{ path('get_chats') }}" class="btn-close"></a>
+					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
 					<ul>
@@ -29,7 +29,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 				</div>
 				<div class="modal-footer">
 					<a href="{{ path('get_chats', {'currentChat': currentChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
-					<a href="{{ path('add_friend', {'confirm': 'true'}) }}" type="button" class="btn btn-primary">Ajouter un ami</a>
+					<a href="{{ path('add_friend', {'currentChat': currentChat, 'confirm': 'true'}) }}" type="button" class="btn btn-primary">Ajouter un ami</a>
 				</div>
 			</div>
 		</div>

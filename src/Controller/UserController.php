@@ -60,7 +60,7 @@ class UserController extends AbstractController
 		]);
 	}
 
-	#[Route('/', name: 'edit_user', methods: ['GET', 'POST'])]
+	#[Route('/update', name: 'edit_user', methods: ['GET', 'POST'])]
 	public function edit(Request $request): Response
 	{
 		/** @var User $user */
@@ -84,6 +84,7 @@ class UserController extends AbstractController
 			'background' => 'chats',
 			'modalTitle' => 'Modifier le profil',
 			'form' => $form,
+			'pathCanceled' => 'profile'
 		]);
 	}
 
@@ -119,6 +120,7 @@ class UserController extends AbstractController
 			'background' => 'chats',
 			'modalTitle' => 'Réinitialiser le mot de passe',
 			'form' => $form,
+			'pathCanceled' => 'profile'
 		]);
 	}
 

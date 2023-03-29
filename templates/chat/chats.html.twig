@@ -79,23 +79,11 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 							<strong>{{ user.getUsername() }}</strong>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-							{# <li>
-								<a class="dropdown-item" href="{{path('edit_user')}}">Profile</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{path('reset_password')}}">Réinitialiser le mot de passe</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{path('get_friends', {'currentChat': currentChat}) }}">Voir mes amis</a>
-							</li>
-							<li>
-								<a class="dropdown-item text-danger" href="{{path('delete_user')}}">Supprimer le compte</a>
-							</li> #}
 							<li>
 								<a class="dropdown-item" href="{{ path('profile', {'currentChat': currentChat}) }}">Gérer mon profil</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="" >Voir mes amis</a>
+								<a class="dropdown-item" href="{{ path('get_friends', {'currentChat': currentChat}) }}">Voir mes amis</a>
 							</li>
 							<li><hr class="dropdown-divider"></li>
 							<li>
@@ -168,7 +156,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 					</div>
 				</div>
 
-			{% else %}
+			{% elseif currentChat is same as '' %}
 
 				<div class="col-9">
 					<div class="alert m-2" role="alert">
