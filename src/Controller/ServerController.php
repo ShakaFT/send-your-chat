@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\DTO\Server\ChangeServerNameDto;
 use App\DTO\Server\CreateServerDto;
 use App\DTO\Server\JoinServerDto;
 use App\Entity\Server;
+use App\Entity\User;
 use App\Utils;
 use App\Form\Server\CreateServerType;
+use App\Form\Server\ChangeServerNameType;
 use App\Form\Server\JoinServerType;
 use App\Services\ServerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -76,20 +79,64 @@ class ServerController extends AbstractController
         ]);
     }
 
+    #[Route('/settings', name: 'server_settings', methods: ["GET", "POST"])]
+    public function server_settings(Request $request): Response
+    {
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
 
-    // #[Route('/update', name: 'update_server', methods: ["GET", "POST"])]
-    // public function update_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'UpdateChats',
-    //     ]);
-    // }
+    #[Route('/update/name', name: 'update_server_name', methods: ["GET", "POST"])]
+    public function update_server_name(Request $request): Response
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
 
-    // #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
-    // public function delete_server(): Response
-    // {
-    //     return $this->render('chat/chats.html.twig', [
-    //         'controller_name' => 'DeleteChats',
-    //     ]);
-    // }
+        $dto = new ChangeServerNameDto();
+
+        $form = $this->createForm(ChangeServerNameType::class, $dto);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //  $server = new Server();
+            //  $server->addUser($this->getUser());
+            //  $error = $this->serverService->add($serverDto, $server);
+
+            //  if (!$error) return $this->redirectToRoute('get_chats');
+        }
+
+        return $this->render('shared/modal.html.twig', [
+            ...$this->utils->chatsRender($request, $currentUser),
+            'confirmationTitle' => 'Modifier',
+            'error' => '',
+            'form' => $form,
+            'modalTitle' => 'Modifier le nom du serveur',
+            'pathCanceled' => 'server_settings',
+        ]);
+    }
+
+    #[Route('/member-list', name: 'member_list', methods: ["GET", "POST"])]
+    public function member_list(Request $request): Response
+    {
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
+
+    #[Route('/update/owner', name: 'update_server_owner', methods: ["GET", "POST"])]
+    public function update_server_owner(Request $request): Response
+    {
+        return $this->render('chat/settings.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+        ]);
+    }
+
+    #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
+    public function delete_server(): Response
+    {
+        return $this->render('chat/chats.html.twig', [
+            'controller_name' => 'DeleteChats',
+        ]);
+    }
 }

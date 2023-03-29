@@ -4,21 +4,15 @@ namespace App\Controller;
 
 use App\DTO\SendMessageDto;
 
-use App\DTO\Server\ChangeServerNameDto;
-use App\DTO\Server\CreateServerDto;
-use App\DTO\Server\JoinServerDto;
-use App\Entity\Server;
 use App\Entity\ServerMessage;
 use App\Entity\User;
 use App\Form\SendMessageType;
-use App\Form\Server\ChangeServerNameType;
 use App\Entity\DiscussionMessage;
 use App\Services\DiscussionMessageService;
 use App\Services\ServerMessageService;
 use App\Utils;
 use App\Services\DiscussionService;
 use App\Services\ServerService;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

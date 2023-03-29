@@ -20,7 +20,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 					<div class="d-flex flex-column">
 						<a href="{{ path('update_server_name', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
 						<a href="{{ path('member_list', {'currentChat': currentChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
-						<a href="{{ path('update_owner', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
+						<a href="{{ path('update_server_owner', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
 						<a href="{{ path('delete_server', {'currentChat': currentChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
 					</div>
 				</div>
