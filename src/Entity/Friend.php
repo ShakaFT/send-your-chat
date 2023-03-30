@@ -17,6 +17,9 @@ class Friend extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?User $receiver = null;
 
+    #[ORM\Column]
+    private ?bool $accepted = null;
+
     /**
      * @param AddFriendDto $dto
      */
@@ -41,6 +44,18 @@ class Friend extends AbstractEntity
     public function setReceiver(?User $receiver): self
     {
         $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    public function isAccepted(): ?bool
+    {
+        return $this->accepted;
+    }
+
+    public function setAccepted(bool $accepted): self
+    {
+        $this->accepted = $accepted;
 
         return $this;
     }
