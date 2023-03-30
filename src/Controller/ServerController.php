@@ -40,8 +40,10 @@ class ServerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
             $server = new Server();
-            $server->addUser($this->getUser());
+            $server->addUser($user);
+            $server->setOwner($user);
             $this->serverService->add($serverDto, $server);
 
             return $this->redirectToRoute('get_chats');
@@ -153,7 +155,7 @@ class ServerController extends AbstractController
          $form->handleRequest($request);
  
          if ($form->isSubmitted() && $form->isValid()) {
-             $error = $this->serverService->changeName($currentChat[0], $dto);
+             $error = $this->serverService->changeOwner($currentChat[0], $dto);
  
              if (!$error) return $this->redirectToRoute('get_chats', [
                  'currentChat' => $currentChat[0],

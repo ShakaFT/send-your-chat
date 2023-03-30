@@ -29,6 +29,10 @@ class Server extends AbstractEntity
     #[ORM\Column]
     private ?float $lastInteraction = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ownerServers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -135,6 +139,18 @@ class Server extends AbstractEntity
     public function setLastInteraction(float $lastInteraction): self
     {
         $this->lastInteraction = $lastInteraction;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
