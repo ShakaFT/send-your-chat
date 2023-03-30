@@ -7,11 +7,11 @@ use App\Entity\AbstractEntity;
 use App\Entity\Server;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateServerDto extends AbstractDto
+class UpdateServerOwnerDto extends AbstractDto
 {
 
 	#[Assert\NotBlank]
-	public string $name;
+	public string $newOwner;
 
 	/**
 	 * @param Server $server

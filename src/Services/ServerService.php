@@ -16,8 +16,10 @@ use Doctrine\Common\Collections\Collection;
 class ServerService extends AbstractEntityService
 {
 
-	public function __construct(ServerRepository $serverRepository)
+	private ServerMessageService $serverMessageService;
+	public function __construct(ServerRepository $serverRepository, ServerMessageService $serverMessageService)
 	{
+		$this->serverMessageService = $serverMessageService;
 		parent::__construct($serverRepository);
 	}
 
@@ -80,6 +82,14 @@ class ServerService extends AbstractEntityService
 		$this->repository->save($server, true);
 
 		return '';
+	}
+
+	/**
+	 * @param Server $server
+	 */
+	public function delete(AbstractEntity $server): void {
+		$this->serverMessageService->deleteMessages($server);
+		parent::delete($server);
 	}
 
 	public function getById(int $id) : Server
