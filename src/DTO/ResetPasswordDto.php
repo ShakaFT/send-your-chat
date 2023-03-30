@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ResetPasswordDto extends AbstractDto
 {
     #[Assert\NotBlank]
+    public ?string $oldPassword = null;
+    #[Assert\NotBlank]
     public ?string $newPassword = null;
     #[Assert\NotBlank]
     public ?string $confirmPassword = null;

@@ -91,8 +91,13 @@ class UserService extends AbstractEntityService {
 	 * @param User $entity
 	 */
 	public function updatePassword(AbstractDto $dto, AbstractEntity $entity): string {
+
+		if(!$this->passwordHasher->isPasswordValid($entity, $dto->oldPassword)) {
+			return "L'ancien mot de passe n'est pas correct.";
+		}
+
 		if($dto->newPassword !== $dto->confirmPassword) {
-			return 'Les deux mots de passe doivent être identiques';
+			return 'Les deux mots de passe doivent être identiques.';
 		}
 		
 		$entity->setPassword($this->encodePassword($entity, $dto->newPassword));
