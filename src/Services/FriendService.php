@@ -21,6 +21,15 @@ class FriendService extends AbstractEntityService
     }
 
     /**
+     * @param Friend $entity
+     */
+    public function acceptRequest(AbstractEntity $entity): void
+    {
+        $entity->setAccepted(true);
+        $this->repository->save($entity, true);
+    }
+
+    /**
      * @param AddFriendDto $dto
      * @param Friend $entity
      */
@@ -47,6 +56,7 @@ class FriendService extends AbstractEntityService
 
         $entity->setSender($currentUser);
         $entity->setReceiver($user);
+        $entity->setAccepted(false);
 
         $this->repository->save($entity, true);
         return '';

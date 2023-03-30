@@ -31,12 +31,21 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 									{{ friend.getSender().getUsername() }}
 								</div>
 								<div>
-									<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getSender().getUsername()}) }}" type="button" class="btn btn-primary">
-										<i class="fa-solid fa-message"></i>
-									</a>
-									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getSender().getUsername()}) }}" type="button" class="btn btn-danger">
-										<i class="fa-solid fa-trash"></i>
-									</a>
+									{% if friend.isAccepted() %}
+										<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getSender().getUsername()}) }}" type="button" class="btn btn-primary">
+											<i class="fa-solid fa-message"></i>
+										</a>
+										<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getSender().getUsername()}) }}" type="button" class="btn btn-danger">
+											<i class="fa-solid fa-trash"></i>
+										</a>
+									{% else %}
+										<a href="{{ path('friend_request', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getSender().getUsername(), 'accepted': 'true'}) }}" type="button" class="btn btn-primary">
+											<i class="fa-solid fa-check"></i>
+										</a>
+										<a href="{{ path('friend_request', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getSender().getUsername(), 'accepted': 'false'}) }}" type="button" class="btn btn-danger">
+											<i class="fa-solid fa-xmark"></i>
+										</a>
+									{% endif %}
 								</div>
 							</div>
 						{% else %}
@@ -46,12 +55,16 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 									{{ friend.getReceiver().getUsername() }}
 								</div>
 								<div>
-									<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-primary">
-										<i class="fa-solid fa-message"></i>
-									</a>
-									<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-danger">
-										<i class="fa-solid fa-trash"></i>
-									</a>
+									{% if friend.isAccepted() %}
+										<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-primary">
+											<i class="fa-solid fa-message"></i>
+										</a>
+										<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': friend.getReceiver().getUsername()}) }}" type="button" class="btn btn-danger">
+											<i class="fa-solid fa-trash"></i>
+										</a>
+									{% else %}
+										En attente
+									{% endif %}
 								</div>
 							</div>
 						{% endif %}

@@ -69,15 +69,42 @@ class FriendController extends AbstractController
         ]);
     }
 
+    #[Route('/request', name: 'friend_request')]
+    public function friend_request(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $currentChat = $this->utils->getCurrentChat($request, $user->getChats());
+        $friend = $this->friendService->getByUsername($request->query->get('friend'), $user);
+
+        if ($request->query->get("accepted") === 'true') {
+            $this->friendService->acceptRequest($friend);
+        } else {
+            $this->friendService->delete($friend);
+        }
+
+        return $this->redirectToRoute("get_friends", [
+            'currentChat' => $currentChat[0],
+            'typeChat' => $currentChat[1],
+        ]);
+    }
+
     #[Route('/remove', name: 'remove_friend')]
     public function remove_friend(Request $request): Response
     {
         if ($request->query->get('confirm') === "true") {
             /** @var User $user */
             $user = $this->getUser();
+
+            $currentChat = $this->utils->getCurrentChat($request, $user->getChats());
+
             $friend = $this->friendService->getByUsername($request->query->get('friend'), $user);
             $this->friendService->delete($friend);
-            return $this->redirectToRoute("get_friends");
+            return $this->redirectToRoute("get_friends", [
+                'currentChat' => $currentChat[0],
+                'typeChat' => $currentChat[1],
+            ]);
         }
         return $this->render('shared/alert.html.twig', [
             ...$this->utils->chatsRender($request, $this->getUser()),
