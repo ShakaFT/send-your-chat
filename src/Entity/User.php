@@ -51,6 +51,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Friend::class)]
     private Collection $friendsReceiver;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Server::class)]
+    private Collection $ownerServers;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
@@ -62,6 +65,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->discussionMessages = new ArrayCollection();
         $this->friendsSender = new ArrayCollection();
         $this->friendsReceiver = new ArrayCollection();
+        $this->ownerServers = new ArrayCollection();
     }
 
     /**
@@ -173,28 +177,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         return [...$this->discussions1, ...$this->discussions2];
     }
-
-    // public function addDiscussion(Discussion $discussion): self
-    // {
-    //     if (!$this->discussions->contains($discussion)) {
-    //         $this->discussions->add($discussion);
-    //         $discussion->setUser1($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeDiscussion(Discussion $discussion): self
-    // {
-    //     if ($this->discussions->removeElement($discussion)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($discussion->getUser1() === $this) {
-    //             $discussion->setUser1(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
 
     /**
      * @return Collection<int, ServerMessage>
@@ -323,5 +305,35 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return new ArrayCollection(
             array_merge($this->friendsReceiver->toArray(), $this->friendsSender->toArray())
         );
+    }
+
+    /**
+     * @return Collection<int, Server>
+     */
+    public function getOwnerServers(): Collection
+    {
+        return $this->ownerServers;
+    }
+
+    public function addOwnerServer(Server $ownerServer): self
+    {
+        if (!$this->ownerServers->contains($ownerServer)) {
+            $this->ownerServers->add($ownerServer);
+            $ownerServer->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnerServer(Server $ownerServer): self
+    {
+        if ($this->ownerServers->removeElement($ownerServer)) {
+            // set the owning side to null (unless already changed)
+            if ($ownerServer->getOwner() === $this) {
+                $ownerServer->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
