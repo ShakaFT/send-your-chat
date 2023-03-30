@@ -9,8 +9,10 @@ use App\DTO\Server\JoinServerDto;
 use App\DTO\Server\UpdateServerOwnerDto;
 use App\Entity\AbstractEntity;
 use App\Entity\Server;
+use App\Entity\ServerToken;
 use App\Entity\User;
 use App\Repository\ServerRepository;
+use App\Repository\ServerTokenRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
@@ -19,11 +21,13 @@ class ServerService extends AbstractEntityService
 {
 
 	private ServerMessageService $serverMessageService;
+	private ServerTokenRepository $serverTokenRepository;
 	private UserRepository $userRepository;
 
-	public function __construct(ServerRepository $serverRepository, ServerMessageService $serverMessageService, UserRepository $userRepository)
+	public function __construct(ServerRepository $serverRepository, ServerMessageService $serverMessageService, ServerTokenRepository $serverTokenRepository, UserRepository $userRepository)
 	{
 		$this->serverMessageService = $serverMessageService;
+		$this->serverTokenRepository = $serverTokenRepository;
 		$this->userRepository = $userRepository;
 		parent::__construct($serverRepository);
 	}
@@ -47,14 +51,24 @@ class ServerService extends AbstractEntityService
 	public function join(AbstractDto $dto, User $currentUser): string
 	{
 		$error = "";
+		$now = new DateTimeImmutable();
 
-		/** @var Server $server */
-		try {
-			$server = $this->repository->findByToken($dto->token)[0];
-		} catch (\Exception) {
+		$query = $this->serverTokenRepository->createQueryBuilder('serverToken')
+			->andWhere('serverToken.token = :token')
+			->andWhere('serverToken.expirationTimestamp > :currentTimestamp')
+			->setParameters([
+				'token' => intval($dto->token),
+				'currentTimestamp' => $now->getTimestamp(),
+			])
+			->getQuery()
+			->execute();
+
+		if (!$query) {
 			return "Le code d'invitation est invalide.";
 		}
 
+		/** @var Server $server */
+		$server = $query[0]->getServer();
 
 		if ($server->getUsers()->contains($currentUser)) {
 			return "Vous faites déjà parti de ce serveur.";
@@ -78,7 +92,8 @@ class ServerService extends AbstractEntityService
 	/**
 	 * @param ChangeServerNameDto $dto
 	 */
-	public function changeName(int $serverId, AbstractDto $dto) : string {
+	public function changeName(int $serverId, AbstractDto $dto): string
+	{
 		$server = $this->getById($serverId);
 		if ($server->getName() === $dto->serverName) {
 			return 'Le serveur posséde déjà ce nom.';
@@ -90,10 +105,11 @@ class ServerService extends AbstractEntityService
 		return '';
 	}
 
-		/**
+	/**
 	 * @param UpdateServerOwnerDto $dto
 	 */
-	public function changeOwner(int $serverId, AbstractDto $dto) : string {
+	public function changeOwner(int $serverId, AbstractDto $dto): string
+	{
 		$server = $this->getById($serverId);
 		if ($server->getOwner()->getUsername() === $dto->newOwner) {
 			return 'Vous êtes déjà le propriétaire.';
@@ -117,7 +133,8 @@ class ServerService extends AbstractEntityService
 	/**
 	 * @param Server $server
 	 */
-	public function delete(AbstractEntity $server): void {
+	public function delete(AbstractEntity $server): void
+	{
 		$this->serverMessageService->deleteMessages($server);
 		parent::delete($server);
 	}
@@ -145,8 +162,11 @@ class ServerService extends AbstractEntityService
 		$this->repository->save($server, true);
 	}
 
-	public function getServerToken(int $serverId): string
+	public function getServerToken(int $serverId): int
 	{
-		return $this->getById($serverId)->getToken();
+		$token = new ServerToken();
+		$token->setServer($this->getById($serverId));
+		$this->serverTokenRepository->save($token, true);
+		return $token->getToken();
 	}
 }

@@ -13,10 +13,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: ServerRepository::class)]
 class Server extends AbstractEntity
 {
-
-    #[ORM\Column(length: 255)]
-    private ?string $token = null;
-
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
     private Collection $users;
 
@@ -33,32 +29,19 @@ class Server extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: ServerToken::class)]
+    private Collection $serverTokens;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->serverMessages = new ArrayCollection();
+        $this->serverTokens = new ArrayCollection();
     }
 
     public function setFromCreateDto(CreateServerDto $dto): void {
         $this->setName($dto->name);
-        $this->setToken(Uuid::v4());
 	}
-
-    public function setFromJoinDto(JoinServerDto $dto): void {
-        $this->setToken($dto->token);
-	}
-
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function setToken(string $token): self
-    {
-        $this->token = $token;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, User>
@@ -151,6 +134,36 @@ class Server extends AbstractEntity
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ServerToken>
+     */
+    public function getServerTokens(): Collection
+    {
+        return $this->serverTokens;
+    }
+
+    public function addServerToken(ServerToken $serverToken): self
+    {
+        if (!$this->serverTokens->contains($serverToken)) {
+            $this->serverTokens->add($serverToken);
+            $serverToken->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServerToken(ServerToken $serverToken): self
+    {
+        if ($this->serverTokens->removeElement($serverToken)) {
+            // set the owning side to null (unless already changed)
+            if ($serverToken->getServer() === $this) {
+                $serverToken->setServer(null);
+            }
+        }
 
         return $this;
     }
