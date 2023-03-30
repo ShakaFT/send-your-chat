@@ -14,7 +14,10 @@ class ChangeServerNameType extends AbstractType
     {
         $builder
             ->add('serverName', TextType::class, [
-				'label' => "Nouveau nom du serveur"
+				'label' => "Nouveau nom du serveur",
+                'attr' => [
+                    'class' => 'form-control',
+                ],
 			]);
     }
 

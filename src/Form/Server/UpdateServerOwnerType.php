@@ -14,7 +14,10 @@ class UpdateServerOwnerType extends AbstractType
     {
         $builder
             ->add('newOwner', TextType::class, [
-				'label' => "Pseudo du nouveau propriétaire"
+				'label' => "Pseudo du nouveau propriétaire",
+                'attr' => [
+                    'class' => 'form-control',
+                ],
 			]);
     }
 

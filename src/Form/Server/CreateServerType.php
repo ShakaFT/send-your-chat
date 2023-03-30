@@ -14,7 +14,10 @@ class CreateServerType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-				'label' => 'Nom du serveur'
+				'label' => 'Nom du serveur',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
 			])
         ;
     }

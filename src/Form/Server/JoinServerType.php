@@ -14,7 +14,10 @@ class JoinServerType extends AbstractType
     {
         $builder
             ->add('token', TextType::class, [
-				'label' => "Code d'invitation"
+				'label' => "Code d'invitation",
+                'attr' => [
+                    'class' => 'form-control',
+                ],
 			])
         ;
     }

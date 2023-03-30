@@ -29,20 +29,24 @@ class UserType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Pseudo',
-                'data' => $user ? $user->getUsername() : ""
+                'data' => $user ? $user->getUsername() : "",
+                'class' => 'form-control'
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'data' => $user ? $user->getEmail() : ""
+                'data' => $user ? $user->getEmail() : "",
+                'class' => 'form-control'
 
             ]);
         if (!$user) {
             $builder
                 ->add('password', PasswordType::class, [
-                    'label' => 'Mot de passe'
+                    'label' => 'Mot de passe',
+                    'class' => 'form-control'
                 ])
                 ->add('passwordConfirm', PasswordType::class, [
-                    'label' => 'Confirmation du mot de passe'
+                    'label' => 'Confirmation du mot de passe',
+                    'class' => 'form-control'
                 ]);
         }
     }

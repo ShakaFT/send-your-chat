@@ -14,7 +14,10 @@ class AddFriendType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-				'label' => "Pseudo de votre ami"
+				'label' => "Pseudo de votre ami",
+                'attr' => [
+                    'class' => 'form-control',
+                ],
 			])
         ;
     }
