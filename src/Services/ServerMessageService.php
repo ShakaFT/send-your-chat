@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Server;
 use App\Entity\ServerMessage;
 use App\Entity\User;
 use App\Repository\ServerMessageRepository;
@@ -30,5 +31,14 @@ class ServerMessageService extends AbstractEntityService
 		$entity->setTimestamp($date->getTimestamp());
 		$entity->setUser($currentUser);
 		$this->repository->save($entity, true);
+	}
+
+	public function deleteMessages(Server $server) {
+		$this->repository->createQueryBuilder('message')
+			->delete()
+			->where('message.server = :server_id')
+			->setParameter('server_id', $server->getId())
+			->getQuery()
+			->execute();
 	}
 }

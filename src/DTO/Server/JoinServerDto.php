@@ -15,7 +15,5 @@ class JoinServerDto extends AbstractDto {
 	/**
 	 * @param Server $server
 	 */
-	public function setFromEntity(AbstractEntity $server): void
-	{
-	}
+	public function setFromEntity(AbstractEntity $server): void {}
 }
