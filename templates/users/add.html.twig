@@ -5,12 +5,13 @@
 
 {% block body %}
 	<div class="container d-flex flex-column justify-content-center text-bg-dark min-vw-100 min-vh-100 m-0">
+		<h1 class="text-center">Inscription</h1>
 		<div class"row g-3" style="display: flex; justify-content: center;">
 			{{ form_start(form) }}
 
 			{% for child in form %}
 				{% if 'Token' not in form_label(child) %}
-					<div class="col-auto d-flex flex-column mt-2">
+					<div class="col-auto d-flex flex-column mt-2" style="width: 20rem;">
 						{{ form_label(child) }}
 						{{ form_widget(child) }}
 					</div>
