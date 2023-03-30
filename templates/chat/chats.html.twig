@@ -123,7 +123,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 										{% endif %}
 										<div class="card w-100 text-bg-light">
 											<div class="card-header d-flex justify-content-between p-3">
-												<p class="fw-bold mb-0">{{ message.getUser().getUsername() }}</p>
+												<p class="fw-bold mb-0">{{ message.getUser().isDeleted() ? "Utilisateur supprimé" : message.getUser().getUsername() }}</p>
 												<p class="text-muted small mb-0">
 													<i class="far fa-clock"></i>
 													{{ message.getTimeSinceNow() }}</p>

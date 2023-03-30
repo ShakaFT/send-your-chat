@@ -33,6 +33,7 @@ class UserService extends AbstractEntityService {
 		$userWithSameUsername = $this->repository->findByUsername($dto->username);
 		// set avatar to random image bases on username
 		$entity->setAvatar('https://ui-avatars.com/api/?name=' . $dto->username);
+		$entity->setDeleted(false);
 
 		if ($userWithSameEmail) {
 			return 'Il y a déjà un utilisateur avec cette adresse mail';
@@ -50,6 +51,14 @@ class UserService extends AbstractEntityService {
 	}
 
 	/**
+	 * @param User $entity
+	 */
+	public function delete(AbstractEntity $entity): void {
+		$entity->setDeleted(true);
+		$this->repository->save($entity, true);
+	}
+
+	/**
 	 * @param UserDto $dto
 	 * @param User $entity
 	 */
@@ -64,8 +73,6 @@ class UserService extends AbstractEntityService {
 		if ($userWithNewUsername && $userWithNewUsername[0]->getId() !== $entity->getId()) {
 			return 'Il y a déjà un utilisateur avec ce pseudo';
 		}
-
-	
 
 		return parent::update($dto, $entity);
 	}

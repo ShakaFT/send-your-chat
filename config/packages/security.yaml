@@ -25,6 +25,7 @@ security:
                 check_path: /login
             logout:
                 path: /logout
+            user_checker: App\Security\UserChecker
 
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }

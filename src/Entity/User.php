@@ -51,6 +51,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Friend::class)]
     private Collection $friendsReceiver;
 
+    #[ORM\Column]
+    private ?bool $deleted = null;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
@@ -323,5 +326,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return new ArrayCollection(
             array_merge($this->friendsReceiver->toArray(), $this->friendsSender->toArray())
         );
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
+
+        return $this;
     }
 }
