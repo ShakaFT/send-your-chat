@@ -24,12 +24,16 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 								{{ member.getUsername() }}
 							</div>
 							<div>
-								<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': member.getUsername()}) }}" type="button" class="btn btn-primary">
-									<i class="fa-solid fa-message"></i>
-								</a>
-								<a href="{{ path('remove_friend', {'currentChat': currentChat, 'typeChat': typeChat, 'friend': member.getUsername()}) }}" type="button" class="btn btn-danger">
-									<i class="fa-solid fa-trash"></i>
-								</a>
+								{% if user is not same as(member) %}
+									<a href="{{ path('create_discussion', {'currentChat': currentChat, 'typeChat': typeChat, 'username': member.getUsername()}) }}" type="button" class="btn btn-primary">
+										<i class="fa-solid fa-message"></i>
+									</a>
+								{% endif %}
+								{% if user is same as(owner) and member is not same as(owner) %}
+									<a href="{{ path('remove_member', {'currentChat': currentChat, 'typeChat': typeChat, 'member': member.getUsername()}) }}" type="button" class="btn btn-danger">
+										<i class="fa-solid fa-trash"></i>
+									</a>
+								{% endif %}
 							</div>
 						</div>
 

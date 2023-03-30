@@ -13,6 +13,7 @@ use App\Form\Server\CreateServerType;
 use App\Form\Server\ChangeServerNameType;
 use App\Form\Server\UpdateServerOwnerType;
 use App\Form\Server\JoinServerType;
+use App\Repository\UserRepository;
 use App\Services\ServerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ServerController extends AbstractController
 {
     private ServerService $serverService;
+    private UserRepository $userRepository;
     private Utils $utils;
 
-    public function __construct(ServerService $serverService, Utils $utils)
+    public function __construct(ServerService $serverService, UserRepository $userRepository, Utils $utils)
     {
         $this->serverService = $serverService;
+        $this->userRepository = $userRepository;
         $this->utils = $utils;
     }
 
@@ -86,11 +89,13 @@ class ServerController extends AbstractController
     #[Route('/settings', name: 'server_settings', methods: ["GET", "POST"])]
     public function server_settings(Request $request): Response
     {
+        $currentChat = $request->query->get('currentChat');
         $serverToken = $request->query->get("token") === 'true'
-            ? $this->serverService->getServerToken($request->query->get('currentChat')) : '';
+            ? $this->serverService->getServerToken($currentChat) : '';
 
         return $this->render('chat/settings.html.twig', [
             ...$this->utils->chatsRender($request, $this->getUser()),
+            'owner' => $this->serverService->getById($currentChat)->getOwner(),
             'serverToken' => $serverToken,
         ]);
     }
@@ -137,6 +142,7 @@ class ServerController extends AbstractController
 
         return $this->render('chat/list.html.twig', [
             ...$this->utils->chatsRender($request, $currentUser),
+            'owner' => $this->serverService->getById($currentChat)->getOwner(),
             'modalTitle' => 'Liste des membres',
             'members' => $members,
         ]);
@@ -196,6 +202,67 @@ class ServerController extends AbstractController
             'submitRoute' => 'delete_server',
             'pathCanceled' => 'server_settings',
             'submitParams' => [
+                'currentChat' => $currentChat[0],
+                'typeChat' => $currentChat[1],
+                'confirm' => 'true',
+            ]
+        ]);
+    }
+
+    #[Route('/leave', name: 'leave_server', methods: ["GET", "POST"])]
+    public function leave_server(Request $request): Response
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+
+        $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
+
+        if ($request->query->get('confirm') === "true") {
+            $currentUser->removeServer($this->serverService->getById($currentChat[0]));
+            $this->userRepository->save($currentUser, true);
+            return $this->redirectToRoute("get_chats");
+        }
+        return $this->render('shared/alert.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+            'alertTitle' => 'Quitter le serveur',
+            'background' => 'chats',
+            'confirmationTitle' => 'Quitter',
+            'alertContent' => 'Voulez vous vraiment quitter le serveur ?',
+            'submitRoute' => 'leave_server',
+            'pathCanceled' => 'server_settings',
+            'submitParams' => [
+                'currentChat' => $currentChat[0],
+                'typeChat' => $currentChat[1],
+                'confirm' => 'true',
+            ]
+        ]);
+    }
+
+    #[Route('/remove-member', name: 'remove_member', methods: ["GET", "POST"])]
+    public function remove_member(Request $request): Response
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+
+        $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
+
+        $toDeleteMember = $this->userRepository->findByUsername($request->query->get('member'))[0];
+
+        if ($request->query->get('confirm') === "true") {
+            $toDeleteMember->removeServer($this->serverService->getById($currentChat[0]));
+            $this->userRepository->save($toDeleteMember, true);
+            return $this->redirectToRoute("get_chats");
+        }
+        return $this->render('shared/alert.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+            'alertTitle' => 'Exclure cet utilisateur',
+            'background' => 'chats',
+            'confirmationTitle' => 'Exclure',
+            'alertContent' => 'Voulez vous vraiment exclure cet utilisateur ?',
+            'submitRoute' => 'remove_member',
+            'pathCanceled' => 'server_settings',
+            'submitParams' => [
+                'member' => $request->query->get('member'),
                 'currentChat' => $currentChat[0],
                 'typeChat' => $currentChat[1],
                 'confirm' => 'true',

@@ -27,12 +27,16 @@
 							</div>
 						{% else %}
 							<a href="{{ path('server_settings', {'currentChat': currentChat, 'typeChat': typeChat, 'token': 'true'}) }}" class="btn btn-outline-primary mt-2">Générer un code d'invitation</a>
-
 						{% endif %}
-						<a href="{{ path('update_server_name', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
 						<a href="{{ path('member_list', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
-						<a href="{{ path('update_server_owner', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
-						<a href="{{ path('delete_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
+						{% if user is same as(owner) %}
+							<a href="{{ path('update_server_name', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
+							<a href="{{ path('update_server_owner', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
+							<a href="{{ path('delete_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Supprimer le serveur</a>
+						{% else %}
+							<a href="{{ path('leave_server', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Quitter le serveur</a>
+						{% endif %}
+
 					</div>
 				</div>
 				<div class="modal-footer">
