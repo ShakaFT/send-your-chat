@@ -19,8 +19,11 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 					<a href="{{ path(pathCanceled, {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
-					<b class="text-danger">{{ alertContent }}</b>
-					<b class="text-danger">{{ error }}</b>
+					<b>{{ alertContent }}</b>
+					{% if error %}
+						<hr>
+						<b class="bg-danger form-control" style="--bs-bg-opacity: .5;">{{ error }}</b>
+					{% endif %}
 				</div>
 				<div class="modal-footer">
 					<a href="{{ path(pathCanceled, {'currentChat': currentChat, 'typeChat': typeChat}) }}" type="button" class="btn btn-secondary">Annuler</a>
