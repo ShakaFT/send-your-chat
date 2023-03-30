@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -53,6 +54,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Server::class)]
     private Collection $ownerServers;
+
+    #[ORM\Column]
+    private ?bool $deleted = null;
 
     public function __construct()
     {
@@ -145,6 +149,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Server>
+     */
+    public function getServers(): Collection
+    {
+        return $this->servers;
     }
 
     public function removeServer(Server $server): self
@@ -333,6 +345,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
                 $ownerServer->setOwner(null);
             }
         }
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

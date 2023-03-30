@@ -127,9 +127,10 @@ class UserController extends AbstractController
 	#[Route('/delete', name: 'delete_user', methods: ['GET', 'POST'])]
 	public function deleteAccount(Request $request, Security $security): Response
 	{
+		/** @var User $user */
+		$user = $this->getUser();
+
 		if ($request->query->get('confirm') === "true") {
-			/** @var User $user */
-			$user = $this->getUser();
 			$security->logout(false);
 			$this->userService->delete($user);
 			return $this->redirectToRoute("security_login");
