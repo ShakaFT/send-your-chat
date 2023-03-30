@@ -14,7 +14,6 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 			<div class="modal-content">
 				<div class="modal-header">
 					<h6 class="modal-title">{{ modalTitle }}</h6>
-					<!-- No comprendo -->
 					<a href="{{ path('get_chats', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column" style="max-height: 400px; overflow-y: auto;" data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0">
@@ -37,8 +36,7 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 					{% endfor %}
 				</div>
 				<div class="modal-footer">
-					<a href="{{ path('get_chats', {'currentChat': currentChat, 'typeChat': typeChat}) }}" type="button" class="btn btn-secondary">{{ confirmationTitle }}</a>
-					<a href="{{ path('add_friend', {'currentChat': currentChat, 'typeChat': typeChat}) }}" type="button" class="btn btn-primary">{{ confirmationTitle }}</a>
+					<a href="{{ path('server_settings', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-secondary">Retour</a>
 				</div>
 			</div>
 		</div>

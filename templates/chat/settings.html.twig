@@ -6,12 +6,6 @@
 {% block body %}
 	{% include 'chat/chats.html.twig' %}
 
-	<script type="text/javascript">
-		$(window).on('load', function () {
-$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
-});
-	</script>
-
 	<div class="modal" id="modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm">
 			<div class="modal-content">
@@ -20,7 +14,15 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 					<a href="{{ path('get_chats', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn-close"></a>
 				</div>
 				<div class="modal-body d-flex flex-column">
-					<div class="d-flex flex-column">
+					<div
+						class="d-flex flex-column">
+						<!-- Make a copy on clipboard -->
+						<h4 class="text-center">Lien d'invitation</h4>
+						<span id="copyConfirmation"></span>
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" id="serverLink" value={{ serverToken }} readonly>
+							<button class="btn btn-outline-secondary" type="button" id="copyServerLink">Copier</button>
+						</div>
 						<a href="{{ path('update_server_name', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Modifier le nom du serveur</a>
 						<a href="{{ path('member_list', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-primary mt-2">Voir la liste des membres</a>
 						<a href="{{ path('update_server_owner', {'currentChat': currentChat, 'typeChat': typeChat}) }}" class="btn btn-outline-danger mt-2">Transférer la propriété du serveur</a>
@@ -33,4 +35,23 @@ $('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
 			</div>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		$(window).on('load', function () {
+			$('#modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+		});
+			const serverLink = document.getElementById('serverLink');
+			const copyConfirmation = document.getElementById('copyConfirmation');
+			const btnLink = document.getElementById('copyServerLink');
+
+			btnLink.onclick = function () {
+				serverLink.select();
+				serverLink.setSelectionRange(0, 99999);
+
+				navigator.clipboard.writeText(serverLink.value);
+				
+				copyConfirmation.classList.add('text-success');
+				copyConfirmation.innerHTML = 'Lien copié !';
+			}
+	</script>
 {% endblock %}

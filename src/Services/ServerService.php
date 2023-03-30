@@ -61,7 +61,8 @@ class ServerService extends AbstractEntityService
 		return $error;
 	}
 
-	public function refreshLastInteraction(int $serverId) {
+	public function refreshLastInteraction(int $serverId)
+	{
 		$now = new DateTimeImmutable();
 
 		$server = $this->getById($serverId);
@@ -72,7 +73,8 @@ class ServerService extends AbstractEntityService
 	/**
 	 * @param ChangeServerNameDto $dto
 	 */
-	public function changeName(int $serverId, AbstractDto $dto) {
+	public function changeName(int $serverId, AbstractDto $dto)
+	{
 		$server = $this->getById($serverId);
 		if ($server->getName() === $dto->serverName) {
 			return 'Le serveur posséde déjà ce nom.';
@@ -92,16 +94,31 @@ class ServerService extends AbstractEntityService
 		parent::delete($server);
 	}
 
-	public function getById(int $id) : Server
+	public function getById(int $id): Server
 	{
 		return $this->repository->findById($id)[0];
 	}
 
 	/**
-     * @return Collection<int, User>
-     */
-	public function getMembers(int $serverId) : Collection
+	 * @return Collection<int, User>
+	 */
+	public function getMembers(int $serverId): Collection
 	{
 		return $this->getById($serverId)->getUsers();
+	}
+
+	/**
+	 * @param User $user
+	 */
+	public function removeMember(int $serverId, User $user)
+	{
+		$server = $this->getById($serverId);
+		$server->removeUser($user);
+		$this->repository->save($server, true);
+	}
+
+	public function getServerToken(int $serverId): string
+	{
+		return $this->getById($serverId)->getToken();
 	}
 }

@@ -84,8 +84,12 @@ class ServerController extends AbstractController
     #[Route('/settings', name: 'server_settings', methods: ["GET", "POST"])]
     public function server_settings(Request $request): Response
     {
+        $currentChat = $request->query->get('currentChat');
+        $serverToken = $this->serverService->getServerToken($currentChat);
+
         return $this->render('chat/settings.html.twig', [
             ...$this->utils->chatsRender($request, $this->getUser()),
+            'serverToken' => $serverToken,
         ]);
     }
 
@@ -129,11 +133,9 @@ class ServerController extends AbstractController
         $currentChat = $request->query->get('currentChat');
         $members = $this->serverService->getMembers($currentChat);
 
-        return $this->render('/shared/list.html.twig', [
+        return $this->render('chat/list.html.twig', [
             ...$this->utils->chatsRender($request, $currentUser),
             'modalTitle' => 'Liste des membres',
-            'confirmationTitle' => 'Fermer',
-            // 'pathCanceled' => 'server_settings',
             'members' => $members,
         ]);
     }
