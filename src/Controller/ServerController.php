@@ -86,8 +86,8 @@ class ServerController extends AbstractController
     #[Route('/settings', name: 'server_settings', methods: ["GET", "POST"])]
     public function server_settings(Request $request): Response
     {
-        $currentChat = $request->query->get('currentChat');
-        $serverToken = $this->serverService->getServerToken($currentChat);
+        $serverToken = $request->query->get("token") === 'true'
+            ? $this->serverService->getServerToken($request->query->get('currentChat')) : '';
 
         return $this->render('chat/settings.html.twig', [
             ...$this->utils->chatsRender($request, $this->getUser()),
@@ -145,34 +145,34 @@ class ServerController extends AbstractController
     #[Route('/update/owner', name: 'update_server_owner', methods: ["GET", "POST"])]
     public function update_server_owner(Request $request): Response
     {
-         /** @var User $currentUser */
-         $currentUser = $this->getUser();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
 
-         $dto = new UpdateServerOwnerDto();
-         $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
- 
-         $error = "";
- 
-         $form = $this->createForm(UpdateServerOwnerType::class, $dto);
-         $form->handleRequest($request);
- 
-         if ($form->isSubmitted() && $form->isValid()) {
-             $error = $this->serverService->changeOwner($currentChat[0], $dto);
- 
-             if (!$error) return $this->redirectToRoute('get_chats', [
-                 'currentChat' => $currentChat[0],
-                 'typeChat' => $currentChat[1],
-             ]);
-         }
- 
-         return $this->render('shared/modal.html.twig', [
-             ...$this->utils->chatsRender($request, $currentUser),
-             'confirmationTitle' => 'Transférer',
-             'error' => $error,
-             'form' => $form,
-             'modalTitle' => 'Transférer la propriété du serveur',
-             'pathCanceled' => 'server_settings',
-         ]);
+        $dto = new UpdateServerOwnerDto();
+        $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
+
+        $error = "";
+
+        $form = $this->createForm(UpdateServerOwnerType::class, $dto);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $error = $this->serverService->changeOwner($currentChat[0], $dto);
+
+            if (!$error) return $this->redirectToRoute('get_chats', [
+                'currentChat' => $currentChat[0],
+                'typeChat' => $currentChat[1],
+            ]);
+        }
+
+        return $this->render('shared/modal.html.twig', [
+            ...$this->utils->chatsRender($request, $currentUser),
+            'confirmationTitle' => 'Transférer',
+            'error' => $error,
+            'form' => $form,
+            'modalTitle' => 'Transférer la propriété du serveur',
+            'pathCanceled' => 'server_settings',
+        ]);
     }
 
     #[Route('/delete', name: 'delete_server', methods: ["GET", "POST"])]
@@ -184,22 +184,22 @@ class ServerController extends AbstractController
         $currentChat = $this->utils->getCurrentChat($request, $currentUser->getChats());
 
         if ($request->query->get('confirm') === "true") {
-			$this->serverService->delete($this->serverService->getById($currentChat[0]));
-			return $this->redirectToRoute("get_chats");
-		}
-		return $this->render('shared/alert.html.twig', [
-			...$this->utils->chatsRender($request, $this->getUser()),
-			'alertTitle' => 'Supprimer le serveur',
-			'background' => 'chats',
-			'confirmationTitle' => 'Supprimer',
-			'alertContent' => 'Voulez vous vraiment supprimer le serveur ?',
-			'submitRoute' => 'delete_server',
-			'pathCanceled' =>'server_settings',
-			'submitParams' => [
+            $this->serverService->delete($this->serverService->getById($currentChat[0]));
+            return $this->redirectToRoute("get_chats");
+        }
+        return $this->render('shared/alert.html.twig', [
+            ...$this->utils->chatsRender($request, $this->getUser()),
+            'alertTitle' => 'Supprimer le serveur',
+            'background' => 'chats',
+            'confirmationTitle' => 'Supprimer',
+            'alertContent' => 'Voulez vous vraiment supprimer le serveur ?',
+            'submitRoute' => 'delete_server',
+            'pathCanceled' => 'server_settings',
+            'submitParams' => [
                 'currentChat' => $currentChat[0],
                 'typeChat' => $currentChat[1],
-				'confirm' => 'true',
-			]
-		]);
+                'confirm' => 'true',
+            ]
+        ]);
     }
 }
