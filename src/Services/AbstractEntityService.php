@@ -26,7 +26,8 @@ abstract class AbstractEntityService {
 		return "";
 	}
 
-	public function delete(AbstractEntity $entity): void {
+	public function delete(AbstractEntity $entity): string {
 		$this->repository->remove($entity, true);
+		return '';
 	}
 }

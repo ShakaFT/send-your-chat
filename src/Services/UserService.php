@@ -53,14 +53,18 @@ class UserService extends AbstractEntityService {
 	/**
 	 * @param User $entity
 	 */
-	public function delete(AbstractEntity $entity): void {
+	public function delete(AbstractEntity $entity): string {
 		$entity->setDeleted(true);
 
 		// Removing the user from all their servers
 		foreach ($entity->getServers() as $server) {
+			if ($server->getOwner()->getId() === $entity->getId()) {
+				return 'Vous devez donner la propriété de vos serveurs avant de supprimer votre compte.';
+			}
 			$entity->removeServer($server);
         }
 		$this->repository->save($entity, true);
+		return '';
 	}
 
 	/**

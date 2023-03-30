@@ -129,11 +129,14 @@ class UserController extends AbstractController
 	{
 		/** @var User $user */
 		$user = $this->getUser();
+		$error = '';
 
 		if ($request->query->get('confirm') === "true") {
-			$security->logout(false);
-			$this->userService->delete($user);
-			return $this->redirectToRoute("security_login");
+			$error = $this->userService->delete($user);
+			if (!$error) {
+				$security->logout(false);
+				return $this->redirectToRoute("security_login");
+			}
 		}
 		return $this->render('shared/alert.html.twig', [
 			...$this->utils->chatsRender($request, $this->getUser()),
@@ -145,7 +148,8 @@ class UserController extends AbstractController
 			'pathCanceled' =>'profile',
 			'submitParams' => [
 				'confirm' => 'true'
-			]
+			],
+			'error' => $error
 		]);
 	}
 }

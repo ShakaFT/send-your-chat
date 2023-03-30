@@ -90,7 +90,8 @@ class FriendController extends AbstractController
             'submitParams' => [
                 'confirm' => 'true',
                 'friend' => $request->query->get('friend')
-            ]
+            ],
+            'error' => ''
         ]);
     }
 }

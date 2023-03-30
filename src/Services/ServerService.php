@@ -133,10 +133,10 @@ class ServerService extends AbstractEntityService
 	/**
 	 * @param Server $server
 	 */
-	public function delete(AbstractEntity $server): void
+	public function delete(AbstractEntity $server): string
 	{
 		$this->serverMessageService->deleteMessages($server);
-		parent::delete($server);
+		return parent::delete($server);
 	}
 
 	public function getById(int $id): Server

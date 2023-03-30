@@ -205,7 +205,8 @@ class ServerController extends AbstractController
                 'currentChat' => $currentChat[0],
                 'typeChat' => $currentChat[1],
                 'confirm' => 'true',
-            ]
+            ],
+            'error' => ''
         ]);
     }
 
@@ -234,7 +235,8 @@ class ServerController extends AbstractController
                 'currentChat' => $currentChat[0],
                 'typeChat' => $currentChat[1],
                 'confirm' => 'true',
-            ]
+            ],
+            'error' => ''
         ]);
     }
 
@@ -266,7 +268,8 @@ class ServerController extends AbstractController
                 'currentChat' => $currentChat[0],
                 'typeChat' => $currentChat[1],
                 'confirm' => 'true',
-            ]
+            ],
+            'error' => ''
         ]);
     }
 }
