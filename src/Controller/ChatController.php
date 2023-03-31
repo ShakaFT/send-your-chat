@@ -113,6 +113,10 @@ class ChatController extends AbstractController
         $chatId = $request->query->get("chatId");
         $typeChat = $request->query->get("typeChat");
 
-        return new JsonResponse($this->serverMessageService->getMessages($this->serverService->getById(intval($chatId))));
+        if ($typeChat === 'server') {
+            return new JsonResponse($this->serverMessageService->getMessages($this->serverService->getById(intval($chatId))));
+        } else {
+            return new JsonResponse($this->discussionMessageService->getMessages($this->discussionService->getById(intval($chatId))));
+        }
     }
 }
