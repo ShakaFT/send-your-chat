@@ -19,7 +19,7 @@ class DiscussionMessageService extends AbstractEntityService
 
 	public function getMessages(Discussion $discussion) {
 		$query = $this->repository->createQueryBuilder('message')
-			->where('message.server = :discussion_id')
+			->where('message.discussion = :discussion_id')
 			->setParameter('discussion_id', $discussion->getId())
 			->getQuery()
 			->execute();

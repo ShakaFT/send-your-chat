@@ -37,10 +37,8 @@ class FriendService extends AbstractEntityService
     {
         $error = "";
 
-        /** @var User $user */
-        try {
-            $user = $this->userRepository->findByUsername($dto->username)[0];
-        } catch (\Exception) {
+        $users = $this->userRepository->findByUsername($dto->username);
+        if (!$users || $users[0]->isDeleted()) {
             return "L'utilisateur n'existe pas.";
         }
 
@@ -55,7 +53,7 @@ class FriendService extends AbstractEntityService
         }
 
         $entity->setSender($currentUser);
-        $entity->setReceiver($user);
+        $entity->setReceiver($users[0]);
         $entity->setAccepted(false);
 
         $this->repository->save($entity, true);
