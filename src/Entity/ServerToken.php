@@ -23,7 +23,7 @@ class ServerToken extends AbstractEntity
     {
         $this->token = random_int(100000, 999999);
         $now = new DateTimeImmutable();
-        $this->expirationTimestamp = $now->getTimestamp() + 300; // 5 minutes
+        $this->expirationTimestamp = $now->getTimestamp() + 60; // 1 minute
     }
 
     public function getToken(): ?int

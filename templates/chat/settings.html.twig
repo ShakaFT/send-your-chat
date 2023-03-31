@@ -23,7 +23,7 @@
 							<div class="input-group mb-3">
 								<input type="text" class="form-control" id="serverLink" value={{ serverToken }} readonly>
 								<button class="btn btn-outline-secondary" type="button" id="copyServerLink">Copier</button>
-								Le code expire dans 5 minutes...
+								Le code expire dans 1 minute...
 							</div>
 						{% else %}
 							<a href="{{ path('server_settings', {'currentChat': currentChat, 'typeChat': typeChat, 'token': 'true'}) }}" class="btn btn-outline-primary mt-2">Générer un code d'invitation</a>
