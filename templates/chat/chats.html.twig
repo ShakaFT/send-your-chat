@@ -209,7 +209,11 @@
 
 						var p1 = document.createElement("p");
 						p1.classList.add("fw-bold", "mb-0");
-						p1.textContent = message.username;
+						if (message.userIsDeleted) {
+							p1.textContent = "Utilisateur supprimé";
+						} else {
+							p1.textContent = message.username;
+						}
 
 
 						var p2 = document.createElement("p");

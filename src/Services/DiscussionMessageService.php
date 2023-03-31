@@ -30,6 +30,7 @@ class DiscussionMessageService extends AbstractEntityService
 				'avatar' => $message->getUser()->getAvatar(),
 				'content' => $message->getContent(),
 				'timeSinceNow' => $message->getTimeSinceNow(),
+				'userIsDeleted' => $message->getUser()->isDeleted(),
 				'userId' => $message->getUser()->getId(),
 				'username' => $message->getUser()->getUsername(),
 			]);

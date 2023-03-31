@@ -31,6 +31,7 @@ class ServerMessageService extends AbstractEntityService
 				'content' => $message->getContent(),
 				'timeSinceNow' => $message->getTimeSinceNow(),
 				'userId' => $message->getUser()->getId(),
+				'userIsDeleted' => $message->getUser()->isDeleted(),
 				'username' => $message->getUser()->getUsername(),
 			]);
 		}

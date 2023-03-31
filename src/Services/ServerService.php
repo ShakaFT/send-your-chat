@@ -22,11 +22,13 @@ class ServerService extends AbstractEntityService
 
 	private ServerMessageService $serverMessageService;
 	private ServerTokenRepository $serverTokenRepository;
+	private ServerTokenService $serverTokenService;
 	private UserRepository $userRepository;
 
-	public function __construct(ServerRepository $serverRepository, ServerMessageService $serverMessageService, ServerTokenRepository $serverTokenRepository, UserRepository $userRepository)
+	public function __construct(ServerRepository $serverRepository, ServerMessageService $serverMessageService, ServerTokenRepository $serverTokenRepository, ServerTokenService $serverTokenService, UserRepository $userRepository)
 	{
 		$this->serverMessageService = $serverMessageService;
+		$this->serverTokenService = $serverTokenService;
 		$this->serverTokenRepository = $serverTokenRepository;
 		$this->userRepository = $userRepository;
 		parent::__construct($serverRepository);
@@ -136,6 +138,7 @@ class ServerService extends AbstractEntityService
 	public function delete(AbstractEntity $server): string
 	{
 		$this->serverMessageService->deleteMessages($server);
+		$this->serverTokenService->deleteTokens($server);
 		return parent::delete($server);
 	}
 
