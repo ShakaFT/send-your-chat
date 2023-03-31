@@ -31,12 +31,6 @@
 		}
 	</style>
 
-	<script type="text/javascript">
-		$(document).ready(function () {
-$('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
-});
-	</script>
-
 	<div
 		class="container-fluid text-bg-dark">
 		<!-- Start of row -->
@@ -114,8 +108,9 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 						<!-- End of chat header -->
 						<!-- Start of chat -->
 						<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" tabindex="0" class="messages-container p-2 m-2 flex-grow-1" id="messages-container">
-							<ul class="list-unstyled d-flex justify-content-center flex-column m-auto">
-								{% for message in messages %}
+
+							<ul id="messages" class="list-unstyled d-flex justify-content-center flex-column m-auto">
+								{# {% for message in messages %}
 									<li class="d-flex justify-content-between mb-4">
 										{% if message.getUser().getId() is not same as user.getId() %}
 											<img src="{{ message.getUser().getAvatar() }}" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60" style="background: white;">
@@ -137,7 +132,7 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 											<img src="{{ user.getAvatar() }}" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60" style="background: white;">
 										{% endif %}
 									</li>
-								{% endfor %}
+								{% endfor %} #}
 							</ul>
 						</div>
 						<!-- End of chat -->
@@ -172,4 +167,96 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 		</div>
 		<!-- End of row -->
 	</div>
+
+	<script type="text/javascript">
+		setInterval(async () => {
+			console.log('refresh');
+
+			axios.get('http://localhost:8080/chats/messages?chatId={{currentChat}}&typeChat={{typeChat}}')
+				.then(response => {
+					const ul = document.getElementById("messages");
+					ul.replaceChildren();
+
+					response.data.forEach(message => {
+						var li = document.createElement('li');
+						li.classList.add("d-flex", "justify-content-between", "mb-4")
+
+						// Left img
+
+						var leftImg = document.createElement("img");
+						leftImg.src = message.avatar;
+						leftImg.alt = "avatar";
+						leftImg.width = "60"
+						leftImg.style.background = "white";
+						leftImg.classList.add("rounded-circle", "d-flex", "align-self-start", "me-3", "shadow-1-strong");
+
+						// Right img
+
+						var rightImg = document.createElement("img");
+						rightImg.src = message.avatar;
+						rightImg.alt = "avatar";
+						rightImg.width = "60"
+						rightImg.style.background = "white";
+						rightImg.classList.add("rounded-circle", "d-flex", "align-self-start", "ms-3", "shadow-1-strong");
+
+						var div = document.createElement("div");
+						div.classList.add("card", "w-100", "text-bg-light");
+
+						// Header
+
+						var divHeader = document.createElement("div");
+						divHeader.classList.add("card-header", "d-flex", "justify-content-between", "p-3");
+
+						var p1 = document.createElement("p");
+						p1.classList.add("fw-bold", "mb-0");
+						p1.textContent = message.username;
+
+
+						var p2 = document.createElement("p");
+						p2.classList.add("text-muted", "small", "mb-0");
+						p2.textContent = message.timeSinceNow;
+
+						var i = document.createElement("i");
+						i.classList.add("far", "fa-clock", "ms-2");
+
+						p2.appendChild(i);
+
+						divHeader.appendChild(p1);
+						divHeader.appendChild(p2);
+
+						// Content
+
+						var divBody = document.createElement("div");
+						divBody.classList.add("card-body");
+
+						var p3 = document.createElement("p");
+						p3.classList.add("mb-0");
+						p3.textContent = message.content;
+
+						divBody.appendChild(p3);
+
+						div.appendChild(divHeader);
+						div.appendChild(divBody);
+
+						if (message.userId !== "{{ user.getId() }}") {
+							li.appendChild(leftImg);
+						}
+
+						li.appendChild(div);
+
+						if (message.userId === "{{ user.getId() }}") {
+							li.appendChild(rightImg);
+						}
+
+						ul.appendChild(li);
+					})
+				})
+				$('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
+			
+		}, 1000)
+	</script>
+
+	<script type="text/javascript">
+
+	</script>
 {% endblock %}

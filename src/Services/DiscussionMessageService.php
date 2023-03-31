@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Discussion;
 use App\Entity\DiscussionMessage;
 use App\Entity\User;
 use App\Repository\DiscussionMessageRepository;
@@ -14,6 +15,26 @@ class DiscussionMessageService extends AbstractEntityService
 	public function __construct(DiscussionMessageRepository $discussionMessageRepository)
 	{
 		parent::__construct($discussionMessageRepository);
+	}
+
+	public function getMessages(Discussion $discussion) {
+		$query = $this->repository->createQueryBuilder('message')
+			->where('message.server = :discussion_id')
+			->setParameter('discussion_id', $discussion->getId())
+			->getQuery()
+			->execute();
+
+		$result = [];
+		foreach ($query as $message) {
+			array_push($result, [
+				'avatar' => $message->getUser()->getAvatar(),
+				'content' => $message->getContent(),
+				'timeSinceNow' => $message->getTimeSinceNow(),
+				'userId' => $message->getUser()->getId(),
+				'username' => $message->getUser()->getUsername(),
+			]);
+		}
+		return $result;
 	}
 
 	/**

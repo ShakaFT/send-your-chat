@@ -14,6 +14,7 @@ use App\Utils;
 use App\Services\DiscussionService;
 use App\Services\ServerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,24 +56,26 @@ class ChatController extends AbstractController
             ]);
         }
 
+        $chat = null;
         $chatName = '';
-        $messages = [];
+        $chatService = '';
         if ($currentChat[1] === 'discussion') {
-            $discussion = $this->discussionService->getById($currentChat[0]);
-            $username1 = $discussion->getUser1()->getUsername();
-            $username2 = $discussion->getUser2()->getUsername();
-
+            $chatService = $this->discussionMessageService;
+            $chat = $this->discussionService->getById($currentChat[0]);
+            $username1 = $chat->getUser1()->getUsername();
+            $username2 = $chat->getUser2()->getUsername();
             $chatName = $username1 === $user->getUsername() ? $username2 : $username1;
-            $messages = $discussion->getDiscussionMessages();
+
         } else if ($currentChat[1] === 'server') {
-            $server = $this->serverService->getById($currentChat[0]);
-            $chatName = $server->getName();
-            $messages = $server->getServerMessages();
+            $chatService = $this->serverMessageService;
+            $chat = $this->serverService->getById($currentChat[0]);
+            $chatName = $chat->getName();
         }
 
         return $this->render('chat/chats.html.twig', [
             ...$this->utils->chatsRender($request, $user, $form),
-            'messages' => $messages,
+            'chat' => $chat,
+            'chatService' => $chatService,
             'chatName' => $chatName
         ]);
     }
@@ -102,5 +105,18 @@ class ChatController extends AbstractController
             'currentChat' => $currentChat,
             'typeChat' => $typeChat
         ]);
+    }
+
+    #[Route('/messages', name: 'get_message', methods: ["GET"])]
+    public function get_message(Request $request)
+    {
+        $chatId = $request->query->get("chatId");
+        $typeChat = $request->query->get("typeChat");
+
+        if ($typeChat === 'server') {
+            return new JsonResponse($this->serverMessageService->getMessages($this->serverService->getById(intval($chatId))));
+        } else {
+            return new JsonResponse($this->discussionMessageService->getMessages($this->discussionService->getById(intval($chatId))));
+        }
     }
 }

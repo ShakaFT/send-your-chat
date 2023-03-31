@@ -17,6 +17,26 @@ class ServerMessageService extends AbstractEntityService
 		parent::__construct($serverMessageRepository);
 	}
 
+	public function getMessages(Server $server) {
+		$query = $this->repository->createQueryBuilder('message')
+			->where('message.server = :server_id')
+			->setParameter('server_id', $server->getId())
+			->getQuery()
+			->execute();
+
+		$result = [];
+		foreach ($query as $message) {
+			array_push($result, [
+				'avatar' => $message->getUser()->getAvatar(),
+				'content' => $message->getContent(),
+				'timeSinceNow' => $message->getTimeSinceNow(),
+				'userId' => $message->getUser()->getId(),
+				'username' => $message->getUser()->getUsername(),
+			]);
+		}
+		return $result;
+	}
+
 	/**
 	 * @param ServerMessage $entity
 	 */

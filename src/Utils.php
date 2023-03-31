@@ -42,7 +42,7 @@ class Utils
         $timestampSinceNow = ($now->getTimestamp() - $nowAtMidnight->getTimestamp());
 
         if ($messageTimestampSinceNow < 60) {
-            return "À l'instant";
+            return "Maintenant";
         }
 
         if ($messageTimestampSinceNow > $timestampSinceNow) {
