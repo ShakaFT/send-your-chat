@@ -58,6 +58,7 @@ class ChatController extends AbstractController
 
         $chat = null;
         $chatName = '';
+        $chatService = '';
         if ($currentChat[1] === 'discussion') {
             $chatService = $this->discussionMessageService;
             $chat = $this->discussionService->getById($currentChat[0]);
