@@ -21,6 +21,7 @@ class SendMessageType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Envoyer un message...',
+                    'autofocus' => true,
                     'class' => 'form-control rounded-pill py-3 bg-light border-0 shadow-sm px-4',
                 ],
             ])

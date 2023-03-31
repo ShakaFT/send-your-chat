@@ -44,11 +44,10 @@ $('#messages-container').scrollTop($('#messages-container')[0].scrollHeight);
 			class="row">
 			<!-- Start of sidebar -->
 			<div class="d-flex flex-column flex-shrink-0 p-3 col-sm-3 card text-bg-dark vh-100">
-				<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-					<svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-					<span class="fs-4">Send your chat</span>
-				</a>
-
+				<div class="d-flex align-items-center justify-content-center">
+					<img src="{{ asset('/images/logo.png') }}" class="rounded float-left me-2" alt="logo" width="50" height="50">
+					<span class="fs-4">SEND YOUR CHAT</span>
+				</div>
 				<hr>
 
 				<a class="btn btn-outline-primary w-100 mb-2" type="button" href="{{ path('get_friends', {'currentChat': currentChat, 'typeChat': typeChat}) }}">
